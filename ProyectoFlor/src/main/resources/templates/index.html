@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{base::Layout(~{::section})}">
+    <head>
+        <title>Floristería VillaFlor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <section>
+            <!-- Start Slider -->
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="img/Flores4.png" class="d-block w-100" alt="..." height="350px">
+                    </div>
+                    <div class="carousel-item active">
+                        <img src="img/Flores2.jpg" class="d-block w-100" alt="..." height="350px">
+                    </div>
+                    <div class="carousel-item active">
+                        <img src="img/Flores3.jpg" class="d-block w-100" alt="..." height="350px">
+                    </div>
+
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <!-- End Slider -->
+
+            <!-- Start Category Module -->
+            <!-- Start Category Module -->
+            <div class="container">
+                <p class="text-co fs-4">Categorías</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-2">
+                        <div class="card rounded-circle">
+                            <div class="card-body text-center">
+                                <img src="img/categorias/Flores6.jpg" width="65%" height="140px">
+                                <p>Flores</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="card rounded-circle">
+                            <div class="card-body text-center">
+                                <img src="img/categorias/Globos7.jpg" width="65%" height="140px">
+                                <p>Globos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="card rounded-circle">
+                            <div class="card-body text-center">
+                                <img src="img/categorias/Peluches8.jpg" width="65%" height="140px">
+                                <p>Peluches</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="card rounded-circle">
+                            <div class="card-body text-center">
+                                <img src="img/categorias/Suculentas9.jpg" width="65%" height="140px">
+                                <p>Suculentas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="card rounded-circle">
+                            <div class="card-body text-center">
+                                <img src="img/categorias/Tarjetas.jpg" width="65%" height="140px">
+                                <p>Tarjetas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Category Module -->
+
+            <!-- Start Latest Product Module -->
+
+            <div class="container-fluid bg-light p-3">
+                <div class="row">
+                    <p class="text-center fs-4">Nuevos Productos</p>
+
+                    <div class="col-md-3">
+                        <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                            <div class="card-body text-center">
+                                <img src="img/productos/Begonia.jpg" width="65%" height="140px">
+                                <p class="text-center">Begonia</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                            <div class="card-body text-center">
+                                <img src="img/productos/Donkey.jpg" width="65%" height="140px">
+                                <p class="text-center">Sedum Morganianum</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Start Latest Product Module -->
+        </section>
+    </body>
+</html>

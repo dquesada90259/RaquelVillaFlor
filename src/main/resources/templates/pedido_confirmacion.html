@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es" th:replace="~{base :: Layout(~{::content})}">
+    <div th:fragment="content">
+        <main class="container mt-5 text-center">
+            <h2 class="mb-4">¡Pedido confirmado!</h2>
+            <p>Gracias por tu compra. Tu pedido ha sido registrado exitosamente.</p>
+            <p>Puedes revisar el estado de tu pedido en <a th:href="@{/pedido/misPedidos}">Mis Pedidos</a>.</p>
+            <a th:href="@{/catalogo}" class="btn btn-primary mt-3">Seguir comprando</a>
+        </main>
+    </div>
+</html>

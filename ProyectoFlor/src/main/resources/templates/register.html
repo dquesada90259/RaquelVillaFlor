@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{base::Layout(~{::section})}">
+    <head>
+        <title>Floristería VillaFlor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <section>
+            <div class="container mt-5 p-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="card w-100 p-4 shadow">
+                            <div class="card-header text-center">
+                                <p class="fs-4 mb-0">Registro</p>
+                            </div>
+
+                            <div class="card-body">
+                                <form>
+                                    <!-- Nombre -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input class="form-control" type="text" name="nombre" placeholder="Ingresa tu nombre">
+                                    </div>
+
+                                    <!-- Teléfono -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Teléfono</label>
+                                        <input class="form-control" type="tel" name="telefono" placeholder="Ingresa tu teléfono">
+                                    </div>
+
+                                    <!-- Correo -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Correo</label>
+                                        <input class="form-control" type="email" name="correo" placeholder="Ingresa tu correo">
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Contraseña</label>
+                                        <input class="form-control" type="password" name="password" placeholder="Ingresa tu contraseña">
+                                    </div>
+
+                                    <!-- Dirección -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Dirección</label>
+                                        <input class="form-control" type="text" name="direccion" placeholder="Ingresa tu dirección">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                                </form>
+                            </div>
+
+                            <div class="card-footer text-center">
+                                ¿Ya tienes una cuenta? <a href="login" class="text-decoration-none">Inicia sesión</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

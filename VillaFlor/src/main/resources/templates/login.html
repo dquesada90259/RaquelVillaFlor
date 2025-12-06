@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{base::Layout(~{::section})}">
+    <head>
+        <title>Floristería VillaFlor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <section>
+            <div class="container mt-5 p-5">
+                <div class="row">
+                    <!-- Imagen -->
+                    <div class="col-md-6 p-5">
+                        <img alt="Flores" src="img/Flores2.jpg" class="img-fluid" style="height: 400px; object-fit: cover;">
+                    </div>
+
+                    <!-- Login Card -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="card w-100 p-4 shadow">
+                            <div class="card-header text-center">
+                                <p class="fs-4 mb-0">Login</p>
+                            </div>
+
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input class="form-control" name="email" type="email" placeholder="Ingresa tu email">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input class="form-control" name="password" type="password" placeholder="Ingresa tu contraseña">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                                </form>
+                            </div>
+
+                            <div class="card-footer text-center">
+                                <a href="#" class="text-decoration-none">Forgot Password</a><br>
+                                Don´t have an account? <a href="#" class="text-decoration-none">Create one</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

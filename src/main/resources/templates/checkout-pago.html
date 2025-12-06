@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es" th:replace="~{base :: Layout(~{::content})}">
+<div th:fragment="content">
+    <main class="container mt-5">
+        <h2 class="mb-4">Selecciona método de pago</h2>
+
+        <!-- Resumen del carrito -->
+        <div class="mb-4">
+            <h5>Resumen:</h5>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between" th:each="item : ${carrito.items}">
+                    <span th:text="${item.producto.nombre} + ' x ' + ${item.cantidad}"></span>
+                    <span th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 2, 'POINT')}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between fw-bold">
+                    <span>Costo envío</span>
+                    <span th:text="'₡' + ${#numbers.formatDecimal(2000.0, 2, 'POINT')}"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between fw-bold">
+                    <span>Total</span>
+                    <span th:text="'₡' + ${#numbers.formatDecimal(carrito.total, 2, 'POINT')}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <form th:action="@{/checkout/pago}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Método de pago:</label>
+                <select name="idMetodoPago" class="form-select">
+                    <option th:each="mp : ${metodos}" th:value="${mp.id}" th:text="${mp.nombre}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Confirmar pedido</button>
+        </form>
+    </main>
+</div>
+</html>

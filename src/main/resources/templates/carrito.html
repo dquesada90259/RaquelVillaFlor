@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es" th:replace="~{base :: Layout(~{::content})}">
+    <div th:fragment="content">
+
+        <!-- AJUSTE DE ESPACIO SUPERIOR/INFERIOR -->
+        <main class="container mt-5 mb-5">
+
+            <h2 class="mb-4">Tu Carrito de Compras</h2>
+
+            <div th:if="${#lists.isEmpty(items)}" class="alert alert-info">
+                Tu carrito está vacío.
+            </div>
+
+            <table class="table table-striped" th:if="${!#lists.isEmpty(items)}">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${items}">
+                        <td>
+                            <img th:src="@{${item.producto.imagenUrl}}" alt="" width="60">
+                            <span th:text="${item.producto.nombre}"></span>
+                        </td>
+
+                        <td th:text="'₡' + ${#numbers.formatDecimal(item.producto.precio, 2, 2)}"></td>
+
+                        <td th:text="${item.cantidad}"></td>
+
+                        <td th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 2, 2)}"></td>
+
+                        <td>
+                            <form th:action="@{/carrito/eliminar}" method="post" style="display:inline-block;">
+                                <input type="hidden" name="idDetalle" th:value="${item.id}">
+
+                                <!-- ROSADO PASTEL CLARITO -->
+                                <button type="submit" class="btn btn-sm"
+                                        style="background-color:#F8C9D4; border-color:#F8C9D4; color:#000;">
+                                    Eliminar
+                                </button>
+
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${!#lists.isEmpty(items)}" class="text-end mt-3">
+
+                <h4>Total: 
+                    <span th:text="'₡' + ${#numbers.formatDecimal(carrito.total, 2, 2)}"></span>
+                </h4>
+
+                <!-- SEPARACIÓN INFERIOR Y COLOR DEL MENÚ -->
+                <a th:href="@{/checkout/entrega}" 
+                   class="btn mt-2"
+                   style="background-color:#E7007A; border-color:#E7007A; color:white; margin-bottom:40px;">
+                    Proceder al Pago
+                </a>
+
+            </div>
+
+        </main>
+    </div>
+
+    <div class="text-end mt-4">
+        <a th:href="@{/checkout/entrega}" class="btn btn-primary">Ir a Checkout</a>
+    </div>
+
+</html>

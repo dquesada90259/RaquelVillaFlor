@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es" th:replace="~{base :: Layout(~{::content})}">
+    <div th:fragment="content">
+        <main class="container mt-5">
+            <h2 class="mb-4">Selecciona método de entrega</h2>
+
+            <form th:action="@{/checkout/entrega}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Método de entrega:</label>
+                    <select name="metodoEntrega" class="form-select" required>
+                        <option value="domicilio">Domicilio</option>
+                        <option value="recoger">Recoger en tienda</option>
+                    </select>
+                </div>
+
+                <!-- Sección de fecha de entrega (solo si está presente en el carrito) -->
+                <div class="mb-3" th:if="${carrito != null && carrito.fechaEntregaProgramada != null}">
+                    <label class="form-label">Fecha de entrega (opcional):</label>
+                    <input type="datetime-local" name="fechaAgendada" class="form-control"
+                           th:value="${#dates.format(carrito.fechaEntregaProgramada, 'yyyy-MM-dd\'T\'HH:mm')}">
+                </div>
+
+                <!-- Mensaje si no hay fecha programada -->
+                <div class="mb-3" th:if="${carrito != null && carrito.fechaEntregaProgramada == null}">
+                    <p class="text-muted">No se ha programado una fecha de entrega. Puedes elegir una más adelante.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Continuar a pago</button>
+            </form>
+        </main>
+    </div>
+</html>
