@@ -1,10 +1,16 @@
 package com.ProyectoFlor.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,59 +29,53 @@ public class Usuario {
     private String rol;
 
     // Getters y Setters
-    public Long getId() {
-        return id;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
+
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
+
+    // --- Métodos de UserDetails ---
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Spring Security requiere ROLE_ prefix
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.rol.toUpperCase()));
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return this.contrasena;
     }
 
-    public String getNombre() {
-        return nombre;
+    @Override
+    public String getUsername() {
+        return this.correo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    @Override
+    public boolean isAccountNonExpired() { return true; }
 
-    public String getCorreo() {
-        return correo;
-    }
+    @Override
+    public boolean isAccountNonLocked() { return true; }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
 
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
+    @Override
+    public boolean isEnabled() { return true; }
 }
