@@ -1,45 +1,40 @@
 package com.ProyectoFlor.controller;
 
 import com.ProyectoFlor.model.Usuario;
-import com.ProyectoFlor.service.UsuarioService;
+import com.ProyectoFlor.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.Optional;
 
-
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioRepository usuarioRepository;
 
     // Mostrar formulario de registro
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
         model.addAttribute("usuario", new Usuario());
-        return "registro";
+        return "registro"; // nombre del archivo .html
     }
 
     // Procesar registro
     @PostMapping("/registro")
-    public String procesarRegistro(@ModelAttribute Usuario usuario, Model model, HttpSession session) {
+    public String procesarRegistro(@ModelAttribute Usuario usuario, Model model) {
+        if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
+            model.addAttribute("error", "El correo ya está registrado");
+            return "registro";
+        }
 
-    if (usuarioService.usuarioExiste(usuario.getCorreo())) {
-        model.addAttribute("error", "El correo ya está registrado");
-        return "registro";
-    }
-
-    usuarioService.registrar(usuario);
-
-    session.setAttribute("mensaje", "Registro exitoso, ya puedes iniciar sesión");
-    return "redirect:/usuario/login";
+        usuario.setRol("usuario");
+        usuarioRepository.save(usuario);
+        model.addAttribute("mensaje", "Registro exitoso. Ya puedes iniciar sesión.");
+        return "redirect:/usuario/login";
     }
 
     // Mostrar formulario de login
@@ -48,30 +43,20 @@ public class UsuarioController {
         return "login";
     }
 
-    // Procesar login
     @PostMapping("/login")
-    public String procesarLogin(HttpSession session) {
-    // Obtenemos el usuario desde Spring Security
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String correo = auth.getName();
-    Usuario usuario = usuarioService.buscarPorCorreo(correo);
+public String procesarLogin(@RequestParam String correo,
+                            @RequestParam String contrasena,
+                            Model model) {
 
-    session.setAttribute("usuarioLogeado", usuario);
-    return "redirect:/catalogo"; // redirige a catálogo después del login
+    Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreoAndContrasena(correo, contrasena);
+
+    if (usuarioOpt.isPresent()) {
+        Usuario usuario = usuarioOpt.get();
+        model.addAttribute("usuario", usuario);
+        return "redirect:/catalogo"; // o a donde quieras redirigirlo después
+    } else {
+        model.addAttribute("error", "Correo o contraseña incorrectos");
+        return "login";
+    }
 }
-
-    // Cerrar sesión
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/usuario/login";
-    }
-    
-    @GetMapping("/")
-    public String home(Model model, Authentication authentication) {
-        String correo = authentication.getName(); // obtiene el correo del usuario logueado
-        Usuario usuario = usuarioService.buscarPorCorreo(correo);
-        model.addAttribute("usuario", usuario); // enviamos el usuario completo a la vista
-    return "home"; // tu página principal
-    }
 }

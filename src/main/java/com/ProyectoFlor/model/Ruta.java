@@ -16,11 +16,23 @@ public class Ruta {
         return ruta;
     }
 
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
     public boolean isRequiereRol() {
         return requiereRol;
     }
 
+    public void setRequiereRol(boolean requiereRol) {
+        this.requiereRol = requiereRol;
+    }
+
     public Rol getRol() {
         return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 }

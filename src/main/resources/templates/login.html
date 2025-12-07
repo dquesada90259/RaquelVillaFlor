@@ -1,74 +1,51 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
       th:replace="~{base::Layout(~{::section})}">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-</head>
-
-<body>
-<section>
-    <div class="container mt-5 p-5">
-        <div class="row">
-
-            <!-- Imagen -->
-            <div class="col-md-6 p-5">
-                <img src="/img/Flores2.jpg" alt="Flores" class="img-fluid"
-                     style="height: 400px; object-fit: cover;">
-            </div>
-
-            <!-- Login Card -->
-            <div class="col-md-6 d-flex align-items-center justify-content-center">
-                <div class="card w-100 p-4 shadow">
-
-                    <div class="card-header text-center">
-                        <p class="fs-4 mb-0">Iniciar Sesión</p>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <section>
+            <div class="container mt-5 p-5">
+                <div class="row">
+                    <!-- Imagen -->
+                    <div class="col-md-6 p-5">
+                        <img alt="Flores" src="img/Flores2.jpg" class="img-fluid" style="height: 400px; object-fit: cover;">
                     </div>
 
-                    <div class="card-body">
-
-                        <!-- Mostrar errores -->
-                        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
-
-                        <form th:action="@{/usuario/login}" method="post">
-
-                            <!-- Email -->
-                            <div class="mb-3">
-                                <label class="form-label">Correo</label>
-                                <input class="form-control"
-                                       name="correo"
-                                       type="email"
-                                       placeholder="Ingresa tu correo"
-                                       required>
+                    <!-- Login Card -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="card w-100 p-4 shadow">
+                            <div class="card-header text-center">
+                                <p class="fs-4 mb-0">Iniciar Sesión</p>
                             </div>
 
-                            <!-- Password -->
-                            <div class="mb-3">
-                                <label class="form-label">Contraseña</label>
-                                <input class="form-control"
-                                       name="contrasena"
-                                       type="password"
-                                       placeholder="Ingresa tu contraseña"
-                                       required>
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input class="form-control" name="email" type="email" placeholder="Ingresa tu email">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Contraseña</label>
+                                        <input class="form-control" name="password" type="password" placeholder="Ingresa tu contraseña">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                                </form>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-                        </form>
+                            <div class="card-footer text-center">
+                                <a href="#" class="text-decoration-none">¿Olvidaste to contraseña?</a><br>
+                                ¿No tienes una cuenta? <a href="#" class="text-decoration-none">Crear una cuenta</a>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="card-footer text-center">
-                        <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a><br>
-                        ¿No tienes una cuenta?
-                        <a th:href="@{/usuario/registro}" class="text-decoration-none">Crear una cuenta</a>
-                    </div>
-
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-</body>
-
+        </section>
+    </body>
 </html>
