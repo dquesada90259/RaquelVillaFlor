@@ -1,64 +1,100 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::Layout(~{::section})}">
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <section>
-            <div class="container mt-5 p-5">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="card w-100 p-4 shadow">
-                            <div class="card-header text-center">
-                                <p class="fs-4 mb-0">Registro</p>
-                            </div>
 
-                            <div class="card-body">
-                                <form>
-                                    <!-- Nombre -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Nombre</label>
-                                        <input class="form-control" type="text" name="nombre" placeholder="Ingresa tu nombre">
-                                    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+</head>
 
-                                    <!-- Teléfono -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Teléfono</label>
-                                        <input class="form-control" type="tel" name="telefono" placeholder="Ingresa tu teléfono">
-                                    </div>
+<body>
+<section>
+    <div class="container mt-5 p-5">
+        <div class="row justify-content-center">
 
-                                    <!-- Correo -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Correo</label>
-                                        <input class="form-control" type="email" name="correo" placeholder="Ingresa tu correo">
-                                    </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <div class="card w-100 p-4 shadow">
 
-                                    <!-- Password -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Contraseña</label>
-                                        <input class="form-control" type="password" name="password" placeholder="Ingresa tu contraseña">
-                                    </div>
-
-                                    <!-- Dirección -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Dirección</label>
-                                        <input class="form-control" type="text" name="direccion" placeholder="Ingresa tu dirección">
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                                </form>
-                            </div>
-
-                            <div class="card-footer text-center">
-                                ¿Ya tienes una cuenta? <a href="login" class="text-decoration-none">Inicia sesión</a>
-                            </div>
-                        </div>
+                    <div class="card-header text-center">
+                        <p class="fs-4 mb-0">Registro</p>
                     </div>
+
+                    <div class="card-body">
+
+                        <!-- Mostrar error si correo ya existe -->
+                        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+                        <!-- Mostrar mensaje de registro exitoso -->
+                        <div th:if="${mensaje}" class="alert alert-success text-center" th:text="${mensaje}"></div>
+
+                        <form th:action="@{/usuario/registro}" method="post" th:object="${usuario}">
+
+                            <!-- Nombre -->
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input class="form-control"
+                                       type="text"
+                                       th:field="*{nombre}"
+                                       placeholder="Ingresa tu nombre"
+                                       required>
+                            </div>
+
+                            <!-- Teléfono -->
+                            <div class="mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input class="form-control"
+                                       type="tel"
+                                       th:field="*{telefono}"
+                                       placeholder="Ingresa tu teléfono"
+                                       required>
+                            </div>
+
+                            <!-- Correo -->
+                            <div class="mb-3">
+                                <label class="form-label">Correo</label>
+                                <input class="form-control"
+                                       type="email"
+                                       th:field="*{correo}"
+                                       placeholder="Ingresa tu correo"
+                                       required>
+                            </div>
+
+                            <!-- Contraseña -->
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input class="form-control"
+                                       type="password"
+                                       th:field="*{contrasena}"
+                                       placeholder="Ingresa tu contraseña"
+                                       required>
+                            </div>
+
+                            <!-- Dirección -->
+                            <div class="mb-3">
+                                <label class="form-label">Dirección</label>
+                                <input class="form-control"
+                                       type="text"
+                                       th:field="*{direccion}"
+                                       placeholder="Ingresa tu dirección"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                        </form>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        ¿Ya tienes una cuenta?
+                        <a th:href="@{/usuario/login}" class="text-decoration-none">Inicia sesión</a>
+                    </div>
+
                 </div>
             </div>
-        </section>
-    </body>
+
+        </div>
+    </div>
+</section>
+</body>
+
 </html>

@@ -1,26 +1,30 @@
-package com.ProyectoFlor.service;  
+package com.ProyectoFlor.service;
 
-import com.ProyectoFlor.model.Ruta;
 import com.ProyectoFlor.model.Rol;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ProyectoFlor.model.Ruta;
 import org.springframework.stereotype.Service;
-import com.ProyectoFlor.repository.UsuarioRepository;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RutaService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository; // Repositorio para acceder a los usuarios
-
-    // Este método devuelve las rutas basadas en los roles del usuario
     public List<Ruta> getRutas() {
-        // Obtenemos los roles de los usuarios desde la base de datos
-        List<String> roles = usuarioRepository.findAllRoles();
 
-        return roles.stream()
-                .map(rol -> new Ruta("/" + rol + "/**", true, new Rol(rol))) // Generamos rutas basadas en los roles
-                .collect(Collectors.toList());
+        List<Ruta> rutas = new ArrayList<>();
+
+        // Rutas públicas
+        rutas.add(new Ruta("/usuario/login", false, null));
+        rutas.add(new Ruta("/usuario/registro", false, null));
+        rutas.add(new Ruta("/css/**", false, null));
+        rutas.add(new Ruta("/img/**", false, null));
+
+        // Rutas protegidas
+        rutas.add(new Ruta("/admin/**", true, new Rol("admin")));
+        rutas.add(new Ruta("/catalogo/**", true, new Rol("usuario")));
+        rutas.add(new Ruta("/carrito/**", true, new Rol("usuario")));
+
+        return rutas;
     }
 }

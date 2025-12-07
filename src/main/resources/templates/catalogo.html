@@ -131,12 +131,18 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${producto.nombre}"></h5>
                                 <p class="card-text" th:text="${producto.descripcion}"></p>
-                                <p class="fw-bold text-danger" th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 2, 'POINT')} + '₡'"></p>
-                                <form th:action="@{/carrito/agregar}" method="post">
-                                    <input type="hidden" name="idProducto" th:value="${producto.id}">
-                                    <input type="hidden" name="cantidad" value="1">
-                                    <button type="submit" class="btn-comprar">Comprar</button>
-                                </form>
+                                <p class="fw-bold text-danger"
+                                   th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 2, 'POINT')} + '₡'"></p>
+
+                                <!-- SOLO LOS USUARIOS NORMALES PUEDEN VER "COMPRAR" -->
+                                <div th:if="${usuarioLogeado == null or !usuarioLogeado.rol.equalsIgnoreCase('ADMIN')}">
+                                    <form th:action="@{/carrito/agregar}" method="post">
+                                        <input type="hidden" name="idProducto" th:value="${producto.id}">
+                                        <input type="hidden" name="cantidad" value="1">
+                                        <button type="submit" class="btn-comprar">Comprar</button>
+                                    </form>
+                                </div>
+
                             </div>
                         </div>
                     </div>
