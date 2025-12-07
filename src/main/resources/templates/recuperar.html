@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::Layout(~{::section})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+</head>
+
+<body>
+<section>
+    <div class="container mt-5 p-5">
+        <div class="row">
+
+            <!-- Imagen -->
+            <div class="col-md-6 p-5">
+                <img src="/img/Flores2.jpg" alt="Flores" class="img-fluid"
+                     style="height: 400px; object-fit: cover;">
+            </div>
+
+            <!-- Card -->
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <div class="card w-100 p-4 shadow">
+
+                    <div class="card-header text-center">
+                        <p class="fs-4 mb-0">Recuperar Contraseña</p>
+                    </div>
+
+                    <div class="card-body">
+
+                        <!-- Mensaje éxito -->
+                        <div th:if="${mensaje}" class="alert alert-success text-center"
+                             th:text="${mensaje}"></div>
+
+                        <!-- Mensaje error -->
+                        <div th:if="${error}" class="alert alert-danger text-center"
+                             th:text="${error}"></div>
+
+                        <form th:action="@{/usuario/recuperar}" method="post">
+
+                            <div class="mb-3">
+                                <label class="form-label">Correo registrado</label>
+                                <input class="form-control"
+                                       type="email"
+                                       name="correo"
+                                       placeholder="Ingresa tu correo"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                Enviar enlace de recuperación
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <a th:href="@{/usuario/login}" class="text-decoration-none">
+                            Volver al inicio de sesión
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
+
+</html>

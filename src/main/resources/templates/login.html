@@ -59,13 +59,19 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a><br>
+                        <a th:href="@{/usuario/recuperar}" class="text-decoration-none">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                        <br>
                         ¿No tienes una cuenta?
-                        <a th:href="@{/usuario/registro}" class="text-decoration-none">Crear una cuenta</a>
+                        <a th:href="@{/usuario/registro}" class="text-decoration-none">
+                            Crear una cuenta
+                        </a>
                     </div>
 
                 </div>
             </div>
+
         </div>
     </div>
 </section>

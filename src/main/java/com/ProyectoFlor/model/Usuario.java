@@ -28,6 +28,9 @@ public class Usuario implements UserDetails {
 
     private String rol;
 
+    @Column(name = "token_recuperacion")
+    private String tokenRecuperacion;
+
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -50,22 +53,20 @@ public class Usuario implements UserDetails {
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
 
+    public String getTokenRecuperacion() { return tokenRecuperacion; }
+    public void setTokenRecuperacion(String tokenRecuperacion) { this.tokenRecuperacion = tokenRecuperacion; }
+
     // --- Métodos de UserDetails ---
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security requiere ROLE_ prefix
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.rol.toUpperCase()));
     }
 
     @Override
-    public String getPassword() {
-        return this.contrasena;
-    }
+    public String getPassword() { return this.contrasena; }
 
     @Override
-    public String getUsername() {
-        return this.correo;
-    }
+    public String getUsername() { return this.correo; }
 
     @Override
     public boolean isAccountNonExpired() { return true; }

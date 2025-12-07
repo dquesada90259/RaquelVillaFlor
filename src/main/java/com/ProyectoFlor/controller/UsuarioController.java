@@ -2,73 +2,119 @@ package com.ProyectoFlor.controller;
 
 import com.ProyectoFlor.model.Usuario;
 import com.ProyectoFlor.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import jakarta.servlet.http.HttpSession;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/usuario")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    // Mostrar formulario de registro
+    // ---------- REGISTRO ----------
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
         model.addAttribute("usuario", new Usuario());
-        return "register"; // Tu archivo correcto
+        return "register";
     }
 
-    // Procesar registro
     @PostMapping("/registro")
     public String procesarRegistro(@ModelAttribute Usuario usuario, Model model, HttpSession session) {
 
-        // Validar si el correo ya existe
         if (usuarioService.usuarioExiste(usuario.getCorreo())) {
             model.addAttribute("error", "El correo ya está registrado");
             return "register";
         }
 
-        // Validar contraseña vacía
-        if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
-            model.addAttribute("error", "Debes ingresar una contraseña");
-            return "register";
-        }
-
-        // Registrar usuario correctamente
         usuarioService.registrar(usuario);
 
         session.setAttribute("mensaje", "Registro exitoso, ya puedes iniciar sesión");
         return "redirect:/usuario/login";
     }
 
-    // Mostrar formulario de login
+    // ---------- LOGIN ----------
     @GetMapping("/login")
-    public String mostrarLogin(Model model) {
+    public String loginPage() {
         return "login";
     }
 
-    // Cerrar sesión
+    // ---------- Cerrar sesión ----------
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/usuario/login?logout=true";
+        return "redirect:/usuario/login";
     }
 
-    // Home opcional mostrando usuario autenticado
-    @GetMapping("/")
-    public String home(Model model, Authentication authentication) {
-        if (authentication != null) {
-            String correo = authentication.getName();
-            Usuario usuario = usuarioService.buscarPorCorreo(correo);
-            model.addAttribute("usuario", usuario);
+    // ---------- RECUPERAR CONTRASEÑA ----------
+    @GetMapping("/recuperar")
+    public String mostrarRecuperar() {
+        return "recuperar"; // formulario para ingresar correo
+    }
+
+    @PostMapping("/recuperar")
+    public String procesarRecuperar(@RequestParam String correo, Model model) {
+
+        Usuario usuario = null;
+
+        try {
+            usuario = usuarioService.buscarPorCorreo(correo);
+        } catch (Exception e) {
+            model.addAttribute("error", "El correo no está registrado");
+            return "recuperar";
         }
-        return "home";
+
+        // Generar token
+        String token = UUID.randomUUID().toString();
+        usuario.setTokenRecuperacion(token);
+        usuarioService.guardar(usuario);
+
+        // Aquí va un correo real, pero por ahora mostramos el link (como el profe)
+        model.addAttribute("mensaje",
+                "Se envió un enlace a tu correo. Link temporal: "
+                        + "http://localhost:50/usuario/restablecer?token=" + token);
+
+        return "recuperar";
+    }
+
+    // ---------- FORMULARIO RESTABLECER ----------
+    @GetMapping("/restablecer")
+    public String mostrarRestablecer(@RequestParam String token, Model model) {
+
+        Usuario usuario = usuarioService.buscarPorToken(token);
+
+        if (usuario == null) {
+            model.addAttribute("error", "El enlace de recuperación no es válido.");
+            return "restablecer";
+        }
+
+        model.addAttribute("token", token);
+        return "restablecer";
+    }
+
+    // ---------- PROCESAR NUEVA CONTRASEÑA ----------
+    @PostMapping("/restablecer")
+    public String procesarRestablecer(@RequestParam String token,
+                                      @RequestParam String contrasena,
+                                      Model model) {
+
+        Usuario usuario = usuarioService.buscarPorToken(token);
+
+        if (usuario == null) {
+            model.addAttribute("error", "El enlace no es válido.");
+            return "restablecer";
+        }
+
+        usuario.setContrasena(contrasena);
+        usuario.setTokenRecuperacion(null); // limpiar token
+        usuarioService.guardar(usuario);
+
+        model.addAttribute("mensaje", "Tu contraseña fue actualizada con éxito.");
+        return "login";
     }
 }

@@ -44,18 +44,27 @@ public class SecurityConfig {
             auth.requestMatchers("/css/**", "/js/**", "/img/**").permitAll();
 
             /* ----------------------------------------------------------
+             *  REPARA TU PROBLEMA:
+             *  PÁGINAS DE RECUPERACIÓN DE CONTRASEÑA SIEMPRE PÚBLICAS
+             * ---------------------------------------------------------- */
+            auth.requestMatchers(
+                    "/usuario/recuperar",
+                    "/usuario/recuperar/**",
+                    "/usuario/restablecer",
+                    "/usuario/restablecer/**"
+            ).permitAll();
+
+            /* ----------------------------------------------------------
              * 2. RUTAS DINÁMICAS DESDE LA BASE DE DATOS
              * ---------------------------------------------------------- */
             var rutas = rutaService.getRutas();
 
             for (Ruta ruta : rutas) {
 
-                // Si requiere rol → aplica restricción
                 if (ruta.isRequiereRol() && ruta.getRol() != null) {
                     auth.requestMatchers(ruta.getRuta())
                             .hasRole(ruta.getRol().getRol());
                 } else {
-                    // rutas sin rol se permiten
                     auth.requestMatchers(ruta.getRuta()).permitAll();
                 }
             }
@@ -89,13 +98,13 @@ public class SecurityConfig {
         /* ACCESO DENEGADO */
         http.exceptionHandling(e -> e.accessDeniedPage("/acceso_denegado"));
 
-        /* UNA SESIÓN POR USUARIO (evita sesiones extrañas) */
+        /* UNA SESIÓN POR USUARIO */
         http.sessionManagement(session -> session
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
         );
 
-        /* CSRF OFF PARA TESTING */
+        /* CSRF OFF */
         http.csrf(csrf -> csrf.disable());
 
         return http.build();
@@ -104,10 +113,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                   .userDetailsService(userDetailsService)
-                   .passwordEncoder(passwordEncoder())
-                   .and()
-                   .build();
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
     }
 
     @Bean

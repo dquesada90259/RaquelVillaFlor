@@ -11,4 +11,6 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     Optional<Usuario> findByCorreoAndContrasena(String correo, String contrasena);
 
     boolean existsByCorreo(String correo);
+    
+    Optional<Usuario> findByTokenRecuperacion(String token);
 }
