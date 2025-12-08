@@ -43,6 +43,13 @@ public class Carrito {
     @Column(name = "fecha_entrega_programada")
     private LocalDateTime fechaEntregaProgramada;
 
+    // 🆕 NUEVOS CAMPOS PARA DIRECCIÓN / DISTRITO DE ENTREGA
+    @Column(name = "direccion_entrega")
+    private String direccionEntrega;
+
+    @Column(name = "distrito_entrega")
+    private String distritoEntrega;
+
     public enum EstadoCarrito {
         activo, comprado, cancelado
     }
