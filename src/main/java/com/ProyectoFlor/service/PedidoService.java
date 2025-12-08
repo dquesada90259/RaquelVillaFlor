@@ -94,4 +94,9 @@ public class PedidoService {
             .max(Comparator.comparing(Pedido::getFechaPedido))
             .orElseThrow(() -> new RuntimeException("No hay pedidos para este usuario"));
 }
+    
+    public Pedido obtenerPedidoPorId(Long id) {
+    return pedidoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+}
 }

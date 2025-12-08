@@ -1,37 +1,68 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es" th:replace="~{base :: Layout(~{::content})}">
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+      th:replace="~{base :: Layout(~{::content})}">
+
 <div th:fragment="content">
+
     <main class="container mt-5">
-        <h2 class="mb-4 text-success">¡Pedido confirmado!</h2>
 
-        <p>Gracias por tu compra, <span th:text="${pedido.usuario.nombre}">Usuario</span>.</p>
-        <p>Tu pedido está en estado: <strong th:text="${pedido.estado}">pendiente</strong>.</p>
+        <h2 class="mb-4 text-success">¡Pedido confirmado con éxito!</h2>
 
-        <h5>Resumen del pedido:</h5>
+        <p>Gracias por tu compra, <strong th:text="${pedido.usuario.nombre}">Usuario</strong>.</p>
+
+        <p>Número de pedido: <strong th:text="${pedido.id}">1</strong></p>
+
+        <p>Estado actual: 
+            <strong th:text="${pedido.estado}">pendiente</strong>
+        </p>
+
+        <!-- MÉTODO DE ENTREGA -->
+        <div class="alert alert-info mt-3" th:if="${pedido.metodoEntrega == 'domicilio'}">
+            Tu pedido será entregado a domicilio.
+            <br>
+            El repartidor se comunicará contigo para confirmar la dirección.
+        </div>
+
+        <div class="alert alert-info mt-3" th:if="${pedido.metodoEntrega == 'recoger'}">
+            Podrás recoger tu pedido en la tienda:
+            <br>
+            <strong>Contiguo a Restaurante The Reef, Daniel Flores.</strong>
+        </div>
+
+        <div class="alert alert-info mt-3" th:if="${pedido.metodoEntrega == 'agendar'}">
+            Tu pedido ha sido agendado para:
+            <strong th:text="${#dates.format(pedido.fechaEntregaProgramada, 'dd/MM/yyyy HH:mm')}"></strong>
+        </div>
+
+        <h5 class="mt-4">Resumen del pedido:</h5>
         <ul class="list-group mb-4">
-            <li class="list-group-item d-flex justify-content-between" th:each="item : ${pedido.detalles}">
-                <span th:text="${item.producto.nombre} + ' x ' + ${item.cantidad}"></span>
-                <span th:text="'₡' + ${#numbers.formatDecimal(item.subtotal, 2, 'POINT')}"></span>
+
+            <li class="list-group-item d-flex justify-content-between" 
+                th:each="item : ${pedido.detalles}">
+                <span th:text="${item.producto.nombre + ' x ' + item.cantidad}"></span>
+                <span th:text="|₡${item.subtotal}|"></span>
             </li>
+
             <li class="list-group-item d-flex justify-content-between fw-bold">
                 <span>Costo envío</span>
-                <span th:text="'₡' + ${#numbers.formatDecimal(pedido.costoEnvio, 2, 'POINT')}"></span>
+                <span th:text="|₡${pedido.costoEnvio}|"></span>
             </li>
+
             <li class="list-group-item d-flex justify-content-between fw-bold">
                 <span>Total</span>
-                <span th:text="'₡' + ${#numbers.formatDecimal(pedido.total, 2, 'POINT')}"></span>
+                <span th:text="|₡${pedido.total}|"></span>
             </li>
         </ul>
 
-        <h5>Detalles de pago y entrega:</h5>
-        <p><strong>Método de pago:</strong> <span th:text="${pedido.metodoPago.nombre}">Tarjeta</span></p>
-        <p><strong>Método de entrega:</strong> <span th:text="${pedido.metodoEntrega}">Domicilio</span></p>
-        <p th:if="${pedido.fechaEntregaProgramada != null}">
-            <strong>Fecha de entrega programada:</strong> 
-            <span th:text="${#dates.format(pedido.fechaEntregaProgramada, 'dd/MM/yyyy HH:mm')}"></span>
+        <h5>Detalles de pago:</h5>
+        <p>
+            <strong>Método de pago:</strong> 
+            <span th:text="${pedido.metodoPago.nombre}">Pago</span>
         </p>
 
-        <a th:href="@{/catalogo}" class="btn btn-primary">Seguir comprando</a>
+        <a th:href="@{/}" class="btn btn-primary mt-3">Seguir comprando</a>
+
     </main>
+
 </div>
 </html>

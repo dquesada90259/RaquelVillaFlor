@@ -2,10 +2,10 @@ package com.ProyectoFlor.controller;
 
 import com.ProyectoFlor.model.Carrito;
 import com.ProyectoFlor.model.Usuario;
+import com.ProyectoFlor.repository.MetodoPagoRepository;
 import com.ProyectoFlor.service.CarritoService;
 import com.ProyectoFlor.service.PedidoService;
 import com.ProyectoFlor.service.UsuarioService;
-import com.ProyectoFlor.repository.MetodoPagoRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -98,33 +98,28 @@ public class CheckoutController {
             return "checkout-entrega";
         }
 
-        // ❌ Fecha pasada
         if (fecha.isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "La fecha seleccionada no puede estar en el pasado.");
             model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
-        // ❌ Domingo
         if (fecha.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            model.addAttribute("error", "No se realizan entregas ni retiros los domingos.");
+            model.addAttribute("error", "No se realizan entregas los domingos.");
             model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
-        // ❌ Horario fuera de rango
         int hora = fecha.getHour();
         if (hora < 8 || hora > 19) {
-            model.addAttribute("error", "Debes seleccionar una hora dentro del horario de atención (8am–7pm).");
+            model.addAttribute("error", "Horario permitido: 8am a 7pm.");
             model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
-        // Guardar configuración para recoger/agendar
         carrito.setMetodoEntrega(metodoEntrega);
         carrito.setFechaEntregaProgramada(fecha);
 
-        // Limpiar datos de domicilio
         carrito.setDireccionEntrega(null);
         carrito.setDistritoEntrega(null);
 
@@ -148,4 +143,45 @@ public class CheckoutController {
         return "checkout-pago";
     }
 
+    // =============================================================
+    // POST - CONFIRMAR PAGO Y CREAR PEDIDO
+    // =============================================================
+    @PostMapping("/pago")
+    public String procesarPago(@RequestParam Long idMetodoPago, Model model) {
+
+        Usuario usuario = usuarioService.obtenerUsuarioActual();
+        Carrito carrito = carritoService.obtenerCarritoActivo(usuario);
+
+        if (carrito.getItems().isEmpty()) {
+            model.addAttribute("error", "Tu carrito está vacío.");
+            model.addAttribute("carrito", carrito);
+            model.addAttribute("metodos", metodoPagoRepository.findAll());
+            return "checkout-pago";
+        }
+
+        var metodoPago = metodoPagoRepository.findById(idMetodoPago)
+                .orElseThrow(() -> new RuntimeException("Método de pago no válido"));
+
+        var pedido = pedidoService.crearPedidoDesdeCarrito(
+                carrito,
+                metodoPago,
+                carrito.getMetodoEntrega(),
+                carrito.getCostoEnvio(),
+                carrito.getFechaEntregaProgramada()
+        );
+
+        return "redirect:/checkout/confirmacion/" + pedido.getId();
+    }
+
+    // =============================================================
+    // GET - MOSTRAR CONFIRMACIÓN DEL PEDIDO
+    // =============================================================
+    @GetMapping("/confirmacion/{id}")
+public String mostrarConfirmacion(@PathVariable Long id, Model model) {
+
+    var pedido = pedidoService.obtenerPedidoPorId(id);
+
+    model.addAttribute("pedido", pedido);
+    return "pedido-confirmacion";
+}
 }

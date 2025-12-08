@@ -52,6 +52,9 @@
                         <option>Daniel Flores</option>
                         <option>Rivas</option>
                     </select>
+
+                    <!-- ⭐ TEXTO DE COSTO DE ENVÍO (AGREGADO) -->
+                    <p id="textoCostoEnvio" class="text-primary fw-bold mt-2"></p>
                 </div>
 
             </div>
@@ -147,6 +150,40 @@
             }
 
             metodoSelect.addEventListener("change", actualizarCampos);
+
+
+
+            // ⭐ COSTO DE ENVÍO SEGÚN DISTRITO (solo texto)
+            const textoCostoEnvio = document.getElementById("textoCostoEnvio");
+
+            document.getElementById("distrito").addEventListener("change", function () {
+                const distrito = this.value;
+                let costo = 0;
+
+                switch (distrito) {
+                    case "San Isidro de El General":
+                        costo = 2000;
+                        break;
+                    case "El General (General Viejo)":
+                        costo = 2500;
+                        break;
+                    case "Daniel Flores":
+                        costo = 1500;
+                        break;
+                    case "Rivas":
+                        costo = 3000;
+                        break;
+                    default:
+                        costo = 0;
+                }
+
+                if (costo > 0) {
+                    textoCostoEnvio.textContent = "Costo de envío: ₡" + costo;
+                } else {
+                    textoCostoEnvio.textContent = "";
+                }
+            });
+
         });
     </script>
 
