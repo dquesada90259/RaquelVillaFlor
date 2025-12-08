@@ -32,6 +32,9 @@ public class Carrito {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    
+    @Column(name = "costo_envio")
+    private Double costoEnvio;
 
     @Builder.Default
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)

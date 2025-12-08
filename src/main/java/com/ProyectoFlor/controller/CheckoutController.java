@@ -24,9 +24,9 @@ public class CheckoutController {
     private final UsuarioService usuarioService;
     private final MetodoPagoRepository metodoPagoRepository;
 
-    // =============================================
+    // =============================================================
     // GET - Selección de método de entrega
-    // =============================================
+    // =============================================================
     @GetMapping("/entrega")
     public String seleccionEntrega(Model model) {
 
@@ -37,9 +37,9 @@ public class CheckoutController {
         return "checkout-entrega";
     }
 
-    // =============================================
+    // =============================================================
     // POST - Procesar método de entrega
-    // =============================================
+    // =============================================================
     @PostMapping("/entrega")
     public String procesarEntrega(@RequestParam String metodoEntrega,
                                   @RequestParam(required = false) String direccionDomicilio,
@@ -51,18 +51,20 @@ public class CheckoutController {
         Usuario usuario = usuarioService.obtenerUsuarioActual();
         Carrito carrito = carritoService.obtenerCarritoActivo(usuario);
 
-        // ========================================================
+        // =========================================================
         // 1️⃣ ENTREGA A DOMICILIO
-        // ========================================================
+        // =========================================================
         if (metodoEntrega.equals("domicilio")) {
 
             if (direccionDomicilio == null || direccionDomicilio.trim().isEmpty()) {
                 model.addAttribute("error", "Debes ingresar la dirección exacta.");
+                model.addAttribute("carrito", carrito);
                 return "checkout-entrega";
             }
 
             if (distrito == null || distrito.trim().isEmpty()) {
                 model.addAttribute("error", "Debes seleccionar un distrito válido.");
+                model.addAttribute("carrito", carrito);
                 return "checkout-entrega";
             }
 
@@ -75,19 +77,14 @@ public class CheckoutController {
             return "redirect:/checkout/pago";
         }
 
-        // ========================================================
+        // =========================================================
         // 2️⃣ RECOGER EN TIENDA o AGENDAR ENTREGA
-        // ========================================================
-        String fechaStr = null;
-
-        if (metodoEntrega.equals("recoger")) {
-            fechaStr = fechaRecoger;
-        } else if (metodoEntrega.equals("agendar")) {
-            fechaStr = fechaAgendar;
-        }
+        // =========================================================
+        String fechaStr = metodoEntrega.equals("recoger") ? fechaRecoger : fechaAgendar;
 
         if (fechaStr == null || fechaStr.trim().isEmpty()) {
             model.addAttribute("error", "Debes seleccionar una fecha y hora.");
+            model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
@@ -97,18 +94,21 @@ public class CheckoutController {
             fecha = LocalDateTime.parse(fechaStr.trim());
         } catch (Exception e) {
             model.addAttribute("error", "La fecha seleccionada no es válida.");
+            model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
         // ❌ Fecha pasada
         if (fecha.isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "La fecha seleccionada no puede estar en el pasado.");
+            model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
         // ❌ Domingo
         if (fecha.getDayOfWeek() == DayOfWeek.SUNDAY) {
             model.addAttribute("error", "No se realizan entregas ni retiros los domingos.");
+            model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
@@ -116,12 +116,15 @@ public class CheckoutController {
         int hora = fecha.getHour();
         if (hora < 8 || hora > 19) {
             model.addAttribute("error", "Debes seleccionar una hora dentro del horario de atención (8am–7pm).");
+            model.addAttribute("carrito", carrito);
             return "checkout-entrega";
         }
 
-        // Guardar configuración
+        // Guardar configuración para recoger/agendar
         carrito.setMetodoEntrega(metodoEntrega);
         carrito.setFechaEntregaProgramada(fecha);
+
+        // Limpiar datos de domicilio
         carrito.setDireccionEntrega(null);
         carrito.setDistritoEntrega(null);
 
@@ -130,9 +133,9 @@ public class CheckoutController {
         return "redirect:/checkout/pago";
     }
 
-    // =============================================
-    // GET - Pago
-    // =============================================
+    // =============================================================
+    // GET - Selección de pago
+    // =============================================================
     @GetMapping("/pago")
     public String seleccionarPago(Model model) {
 
@@ -144,4 +147,5 @@ public class CheckoutController {
 
         return "checkout-pago";
     }
+
 }

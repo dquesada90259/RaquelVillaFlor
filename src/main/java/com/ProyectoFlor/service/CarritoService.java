@@ -75,16 +75,41 @@ public class CarritoService {
     // Recalcular total del carrito, sumando subtotal de items y costo de entrega si aplica
     @Transactional
     public void recalcularTotal(Carrito carrito) {
-        double subtotal = carrito.getItems().stream()
-                .mapToDouble(CarritoDetalle::getSubtotal)
-                .sum();
 
-        double costoEnvio = 0.0;
-        if (carrito.getMetodoEntrega() != null && carrito.getMetodoEntrega().equals("domicilio")) {
-            costoEnvio = 2000.0; // ejemplo: costo fijo
+    double subtotal = carrito.getItems().stream()
+            .mapToDouble(item -> item.getSubtotal())
+            .sum();
+
+    double costoEnvio = calcularCostoEnvio(carrito);
+
+    carrito.setCostoEnvio(costoEnvio);
+    carrito.setTotal(subtotal + costoEnvio);
+
+    carritoRepository.save(carrito);
+    }
+    
+    public double calcularCostoEnvio(Carrito carrito) {
+
+    if ("domicilio".equalsIgnoreCase(carrito.getMetodoEntrega())) {
+
+        if (carrito.getDistritoEntrega() == null) return 0;
+
+        switch (carrito.getDistritoEntrega()) {
+            case "San Isidro de El General":
+                return 2000;
+            case "El General (General Viejo)":
+                return 2500;
+            case "Daniel Flores":
+                return 1500;
+            case "Rivas":
+                return 3000;
+            default:
+                return 0; // desconocido
         }
 
-        carrito.setTotal(subtotal + costoEnvio);
-        carritoRepository.save(carrito);
+    }
+
+    // Recoger o agendar → envío gratis
+    return 0;
     }
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es"
       th:replace="~{base :: Layout(~{::content})}">
+
 <div th:fragment="content">
 
     <main class="container mt-5">
@@ -17,19 +18,19 @@
                 <li class="list-group-item d-flex justify-content-between"
                     th:each="item : ${carrito.items}">
                     <span th:text="${item.producto.nombre + ' x ' + item.cantidad}"></span>
-                    <span th:text="'₡' + item.subtotal"></span>
+                    <span th:text="|₡${item.subtotal}|"></span>
                 </li>
 
                 <!-- COSTO ENVÍO -->
                 <li class="list-group-item d-flex justify-content-between fw-bold">
                     <span>Costo de envío</span>
-                    <span th:text="'₡' + carrito.costoEnvio"></span>
+                    <span th:text="|₡${carrito.costoEnvio}|"></span>
                 </li>
 
                 <!-- TOTAL -->
                 <li class="list-group-item d-flex justify-content-between fw-bold">
                     <span>Total</span>
-                    <span th:text="'₡' + carrito.total"></span>
+                    <span th:text="|₡${carrito.total}|"></span>
                 </li>
 
             </ul>
