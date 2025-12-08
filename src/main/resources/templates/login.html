@@ -30,7 +30,13 @@
                     <div class="card-body">
 
                         <!-- Mostrar errores -->
-                        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+                        <div th:if="${error}" class="alert alert-danger text-center"
+                             th:text="${error}"></div>
+
+                        <!-- Mensaje de cierre por inactividad -->
+                        <div th:if="${sessionExpired}" class="alert alert-info text-center"
+                             th:text="${sessionExpired}">
+                        </div>
 
                         <form th:action="@{/usuario/login}" method="post">
 

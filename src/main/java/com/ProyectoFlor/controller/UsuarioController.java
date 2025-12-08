@@ -40,7 +40,14 @@ public class UsuarioController {
 
     // ---------- LOGIN ----------
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(HttpSession session,
+                            Model model,
+                            @RequestParam(value = "expired", required = false) String expired) {
+
+        if (expired != null) {
+            model.addAttribute("sessionExpired", "Tu sesión expiró por inactividad.");
+        }
+
         return "login";
     }
 
@@ -54,13 +61,13 @@ public class UsuarioController {
     // ---------- RECUPERAR CONTRASEÑA ----------
     @GetMapping("/recuperar")
     public String mostrarRecuperar() {
-        return "recuperar"; // formulario para ingresar correo
+        return "recuperar";
     }
 
     @PostMapping("/recuperar")
     public String procesarRecuperar(@RequestParam String correo, Model model) {
 
-        Usuario usuario = null;
+        Usuario usuario;
 
         try {
             usuario = usuarioService.buscarPorCorreo(correo);
@@ -74,7 +81,6 @@ public class UsuarioController {
         usuario.setTokenRecuperacion(token);
         usuarioService.guardar(usuario);
 
-        // Aquí va un correo real, pero por ahora mostramos el link (como el profe)
         model.addAttribute("mensaje",
                 "Se envió un enlace a tu correo. Link temporal: "
                         + "http://localhost:50/usuario/restablecer?token=" + token);
@@ -82,7 +88,7 @@ public class UsuarioController {
         return "recuperar";
     }
 
-    // ---------- FORMULARIO RESTABLECER ----------
+    // ---------- FORMULARIO DE RESTABLECER ----------
     @GetMapping("/restablecer")
     public String mostrarRestablecer(@RequestParam String token, Model model) {
 
@@ -111,7 +117,7 @@ public class UsuarioController {
         }
 
         usuario.setContrasena(contrasena);
-        usuario.setTokenRecuperacion(null); // limpiar token
+        usuario.setTokenRecuperacion(null);
         usuarioService.guardar(usuario);
 
         model.addAttribute("mensaje", "Tu contraseña fue actualizada con éxito.");

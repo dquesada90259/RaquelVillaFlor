@@ -30,9 +30,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> {
 
-            /* ----------------------------------------------------------
-             * 1. RUTAS PÚBLICAS FIJAS — deben ir ANTES que la DB
-             * ---------------------------------------------------------- */
+            // Rutas públicas fijas
             auth.requestMatchers(
                     "/", "/index", "/home",
                     "/catalogo", "/productos/**",
@@ -40,13 +38,10 @@ public class SecurityConfig {
                     "/error", "/acceso_denegado"
             ).permitAll();
 
-            // recursos estáticos
+            // Recursos estáticos
             auth.requestMatchers("/css/**", "/js/**", "/img/**").permitAll();
 
-            /* ----------------------------------------------------------
-             *  REPARA TU PROBLEMA:
-             *  PÁGINAS DE RECUPERACIÓN DE CONTRASEÑA SIEMPRE PÚBLICAS
-             * ---------------------------------------------------------- */
+            // Recuperar/restablecer CONTRASEÑA SIEMPRE accesible sin login
             auth.requestMatchers(
                     "/usuario/recuperar",
                     "/usuario/recuperar/**",
@@ -54,9 +49,7 @@ public class SecurityConfig {
                     "/usuario/restablecer/**"
             ).permitAll();
 
-            /* ----------------------------------------------------------
-             * 2. RUTAS DINÁMICAS DESDE LA BASE DE DATOS
-             * ---------------------------------------------------------- */
+            // Rutas dinámicas desde BD
             var rutas = rutaService.getRutas();
 
             for (Ruta ruta : rutas) {
@@ -69,13 +62,11 @@ public class SecurityConfig {
                 }
             }
 
-            /* ----------------------------------------------------------
-             * 3. TODO LO DEMÁS → REQUIERE LOGIN
-             * ---------------------------------------------------------- */
+            // Todo lo demás requiere autenticación
             auth.anyRequest().authenticated();
         });
 
-        /* LOGIN */
+        // LOGIN
         http.formLogin(form -> form
                 .loginPage("/usuario/login")
                 .loginProcessingUrl("/usuario/login")
@@ -86,7 +77,7 @@ public class SecurityConfig {
                 .permitAll()
         );
 
-        /* LOGOUT */
+        // LOGOUT
         http.logout(logout -> logout
                 .logoutUrl("/usuario/logout")
                 .logoutSuccessUrl("/usuario/login?logout=true")
@@ -95,16 +86,17 @@ public class SecurityConfig {
                 .permitAll()
         );
 
-        /* ACCESO DENEGADO */
+        // ACCESO DENEGADO
         http.exceptionHandling(e -> e.accessDeniedPage("/acceso_denegado"));
 
-        /* UNA SESIÓN POR USUARIO */
+        // CONTROL DE SESIÓN — Expiración por inactividad
         http.sessionManagement(session -> session
+                .invalidSessionUrl("/usuario/login?expired=true")
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
         );
 
-        /* CSRF OFF */
+        // Desactivar CSRF para facilitar pruebas
         http.csrf(csrf -> csrf.disable());
 
         return http.build();
