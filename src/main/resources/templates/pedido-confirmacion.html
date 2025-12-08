@@ -8,41 +8,85 @@
 
         <h2 class="mb-4 text-success">¡Pedido confirmado con éxito!</h2>
 
-        <p>Gracias por tu compra, <strong th:text="${pedido.usuario.nombre}">Usuario</strong>.</p>
+        <p>
+            Gracias por tu compra,
+            <strong th:text="${pedido.usuario.nombre}">Usuario</strong>.
+        </p>
 
         <p>Número de pedido: <strong th:text="${pedido.id}">1</strong></p>
 
-        <p>Estado actual: 
+        <p>
+            Estado actual:
             <strong th:text="${pedido.estado}">pendiente</strong>
         </p>
 
-        <!-- MÉTODO DE ENTREGA -->
-        <div class="alert alert-info mt-3" th:if="${pedido.metodoEntrega == 'domicilio'}">
-            Tu pedido será entregado a domicilio.
-            <br>
-            El repartidor se comunicará contigo para confirmar la dirección.
+        <!-- ==========================
+             MÉTODO DE ENTREGA
+        =========================== -->
+        <h5 class="mt-4">Método de entrega</h5>
+
+        <p>
+            <strong>Método seleccionado:</strong>
+            <span th:text="${pedido.metodoEntrega}">domicilio</span>
+        </p>
+
+        <!-- ENTREGA A DOMICILIO -->
+        <div class="alert alert-info mt-3"
+             th:if="${pedido.metodoEntrega == 'domicilio'}">
+
+            <p><strong>Entrega a domicilio</strong></p>
+
+            <p th:if="${pedido.direccionEntrega != null}">
+                Dirección: <span th:text="${pedido.direccionEntrega}"></span>
+            </p>
+
+            <p th:if="${pedido.distritoEntrega != null}">
+                Distrito: <span th:text="${pedido.distritoEntrega}"></span>
+            </p>
+
+            <p>El repartidor se comunicará contigo para confirmar la entrega.</p>
+
         </div>
 
-        <div class="alert alert-info mt-3" th:if="${pedido.metodoEntrega == 'recoger'}">
-            Podrás recoger tu pedido en la tienda:
-            <br>
-            <strong>Contiguo a Restaurante The Reef, Daniel Flores.</strong>
+        <!-- RECOGER EN TIENDA -->
+        <div class="alert alert-info mt-3"
+             th:if="${pedido.metodoEntrega == 'recoger'}">
+
+            <p><strong>Retiro en tienda</strong></p>
+
+            <p>
+                Dirección:<br>
+                <strong>Contiguo a Restaurante The Reef, Daniel Flores.</strong>
+            </p>
+
+            <p th:if="${pedido.fechaEntregaProgramada != null}">
+                Horario seleccionado:
+                <strong th:text="${#temporals.format(pedido.fechaEntregaProgramada, 'dd/MM/yyyy HH:mm')}"></strong>
+            </p>
+
         </div>
 
-        <div class="alert alert-info mt-3" th:if="${pedido.metodoEntrega == 'agendar'}">
-            Tu pedido ha sido agendado para:
-            <strong th:text="${#dates.format(pedido.fechaEntregaProgramada, 'dd/MM/yyyy HH:mm')}"></strong>
+        <!-- ENTREGA AGENDADA -->
+        <div class="alert alert-info mt-3"
+             th:if="${pedido.metodoEntrega == 'agendar'}">
+
+            <p><strong>Entrega agendada</strong></p>
+
+            <p th:if="${pedido.fechaEntregaProgramada != null}">
+                Fecha de entrega:
+                <strong th:text="${#temporals.format(pedido.fechaEntregaProgramada, 'dd/MM/yyyy HH:mm')}"></strong>
+            </p>
+
+            <p th:if="${pedido.fechaEntregaProgramada == null}">
+                La fecha aún no fue asignada.
+            </p>
+
         </div>
 
+        <!-- ==== RESUMEN ==== -->
         <h5 class="mt-4">Resumen del pedido:</h5>
+
         <ul class="list-group mb-4">
-
-            <li class="list-group-item d-flex justify-content-between" 
-                th:each="item : ${pedido.detalles}">
-                <span th:text="${item.producto.nombre + ' x ' + item.cantidad}"></span>
-                <span th:text="|₡${item.subtotal}|"></span>
-            </li>
-
             <li class="list-group-item d-flex justify-content-between fw-bold">
                 <span>Costo envío</span>
                 <span th:text="|₡${pedido.costoEnvio}|"></span>
@@ -56,7 +100,7 @@
 
         <h5>Detalles de pago:</h5>
         <p>
-            <strong>Método de pago:</strong> 
+            <strong>Método de pago:</strong>
             <span th:text="${pedido.metodoPago.nombre}">Pago</span>
         </p>
 
@@ -65,4 +109,5 @@
     </main>
 
 </div>
+
 </html>

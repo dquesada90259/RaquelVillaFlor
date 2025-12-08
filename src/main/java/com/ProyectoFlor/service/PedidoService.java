@@ -33,6 +33,11 @@ public class PedidoService {
                 .metodoEntrega(metodoEntrega)
                 .costoEnvio(costoEnvio)
                 .fechaEntregaProgramada(fechaAgendada)
+
+                // 👇 AGREGADO: guardar dirección y distrito en el pedido
+                .direccionEntrega(carrito.getDireccionEntrega())
+                .distritoEntrega(carrito.getDistritoEntrega())
+
                 .build();
 
         pedidoRepository.save(pedido);
@@ -89,14 +94,14 @@ public class PedidoService {
     }
     
     public Pedido obtenerUltimoPedido(Usuario usuario) {
-    return pedidoRepository.findByUsuario(usuario)
-            .stream()
-            .max(Comparator.comparing(Pedido::getFechaPedido))
-            .orElseThrow(() -> new RuntimeException("No hay pedidos para este usuario"));
-}
+        return pedidoRepository.findByUsuario(usuario)
+                .stream()
+                .max(Comparator.comparing(Pedido::getFechaPedido))
+                .orElseThrow(() -> new RuntimeException("No hay pedidos para este usuario"));
+    }
     
     public Pedido obtenerPedidoPorId(Long id) {
-    return pedidoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
-}
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+    }
 }

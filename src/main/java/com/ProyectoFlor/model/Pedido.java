@@ -43,7 +43,10 @@ public class Pedido {
     @Column(name = "fecha_entrega_programada")
     private LocalDateTime fechaEntregaProgramada;
 
-    // 👇 NECESARIO PARA QUE el HTML funcione
+    // 👇 NECESARIO para evitar errores en la vista
+    private String direccionEntrega;
+    private String distritoEntrega;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private java.util.List<DetallePedido> detalles;
 }
