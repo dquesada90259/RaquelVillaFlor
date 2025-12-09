@@ -29,13 +29,20 @@
 
                     <div class="card-body">
 
-                        <!-- Mostrar errores -->
-                        <div th:if="${error}" class="alert alert-danger text-center"
-                             th:text="${error}"></div>
+                        <!-- Mostrar error de Spring Security -->
+                        <div th:if="${param.error}" 
+                             class="alert alert-danger text-center">
+                            Correo o contraseña incorrectos.
+                        </div>
 
                         <!-- Mensaje de cierre por inactividad -->
                         <div th:if="${sessionExpired}" class="alert alert-info text-center"
                              th:text="${sessionExpired}">
+                        </div>
+
+                        <!-- Mensaje cuando el usuario cerró sesión -->
+                        <div th:if="${param.logout}" class="alert alert-success text-center">
+                            Has cerrado sesión correctamente.
                         </div>
 
                         <form th:action="@{/usuario/login}" method="post">

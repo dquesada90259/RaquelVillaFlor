@@ -70,7 +70,8 @@ public class UsuarioController {
         Usuario usuario;
 
         try {
-            usuario = usuarioService.buscarPorCorreo(correo);
+            usuario = usuarioService.buscarPorCorreo(correo)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         } catch (Exception e) {
             model.addAttribute("error", "El correo no está registrado");
             return "recuperar";
@@ -92,7 +93,8 @@ public class UsuarioController {
     @GetMapping("/restablecer")
     public String mostrarRestablecer(@RequestParam String token, Model model) {
 
-        Usuario usuario = usuarioService.buscarPorToken(token);
+        Usuario usuario = usuarioService.buscarPorToken(token)
+                .orElse(null);
 
         if (usuario == null) {
             model.addAttribute("error", "El enlace de recuperación no es válido.");
@@ -109,16 +111,16 @@ public class UsuarioController {
                                       @RequestParam String contrasena,
                                       Model model) {
 
-        Usuario usuario = usuarioService.buscarPorToken(token);
+        Usuario usuario = usuarioService.buscarPorToken(token)
+                .orElse(null);
 
         if (usuario == null) {
             model.addAttribute("error", "El enlace no es válido.");
             return "restablecer";
         }
 
-        usuario.setContrasena(contrasena);
-        usuario.setTokenRecuperacion(null);
-        usuarioService.guardar(usuario);
+        usuarioService.cambiarContrasena(usuario.getId(), contrasena);
+        usuarioService.limpiarTokenRecuperacion(usuario.getId());
 
         model.addAttribute("mensaje", "Tu contraseña fue actualizada con éxito.");
         return "login";

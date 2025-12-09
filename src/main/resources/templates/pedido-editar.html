@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+      th:replace="~{base :: Layout(~{::content})}">
+
+<div th:fragment="content">
+
+    <main class="container mt-5">
+
+        <h2 class="mb-4">Modificar pedido</h2>
+
+        <form th:action="@{/pedido/editar/{id}(id=${pedido.id})}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Método de entrega</label>
+                <select name="metodoEntrega" class="form-control">
+
+                    <option 
+                        th:selected="${pedido.metodoEntrega != null 
+                                      and pedido.metodoEntrega.equals('Entrega a domicilio')}">
+                        Entrega a domicilio
+                    </option>
+
+                    <option 
+                        th:selected="${pedido.metodoEntrega != null 
+                                      and pedido.metodoEntrega.equals('Recoger en Tienda')}">
+                        Recoger en Tienda
+                    </option>
+
+                    <option 
+                        th:selected="${pedido.metodoEntrega != null 
+                                      and pedido.metodoEntrega.equals('Agendar para después')}">
+                        Agendar para después
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dirección de entrega</label>
+                <input type="text" name="direccionEntrega" class="form-control"
+                       th:value="${pedido.direccionEntrega}"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Distrito</label>
+                <input type="text" name="distritoEntrega" class="form-control"
+                       th:value="${pedido.distritoEntrega}"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha programada</label>
+                <input type="datetime-local" name="fechaEntregaProgramada"
+                       class="form-control"
+                       th:value="${pedido.fechaEntregaProgramada != null ?
+                                 #temporals.format(pedido.fechaEntregaProgramada, 'yyyy-MM-dd''T''HH:mm') : ''}"/>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3">Guardar cambios</button>
+
+        </form>
+
+    </main>
+
+</div>
+
+</html>

@@ -13,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
@@ -47,6 +46,17 @@ public class SecurityConfig {
                     "/usuario/recuperar/**",
                     "/usuario/restablecer",
                     "/usuario/restablecer/**"
+            ).permitAll();
+
+            // 🔥 PERMITIR TODAS LAS RUTAS DEL CARRITO para evitar errores 405
+            auth.requestMatchers(
+                    "/carrito/**",
+                    "/carrito/agregar/**",
+                    "/carrito/eliminar/**",
+                    "/carrito/actualizar/**",
+                    "/carrito/finalizar",
+                    "/carrito/confirmar",
+                    "/carrito/guardar"
             ).permitAll();
 
             // Rutas dinámicas desde BD
@@ -104,15 +114,18 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+        AuthenticationManagerBuilder builder =
+            http.getSharedObject(AuthenticationManagerBuilder.class);
+
+        builder
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
+
+        return builder.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
     }
 }

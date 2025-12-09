@@ -19,8 +19,10 @@ public class UsuarioSessionController {
     public Usuario getUsuarioLogeado(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()
                 && !"anonymousUser".equals(authentication.getName())) {
-            // Obtiene el Usuario real desde la base de datos
-            return usuarioService.buscarPorCorreo(authentication.getName());
+
+            // 🔥 CORREGIDO → obtenemos el usuario real desde Optional
+            return usuarioService.buscarPorCorreo(authentication.getName())
+                    .orElse(null);
         }
         return null;
     }

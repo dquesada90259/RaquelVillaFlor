@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es"
+      th:replace="~{base :: Layout(~{::content})}">
+
+<div th:fragment="content">
+
+    <main class="container mt-5">
+
+        <h2 class="mb-4">Mis pedidos</h2>
+
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                No se puede modificar o cancelar este pedido porque ya está en proceso de entrega.
+            </div>
+        </div>
+
+        <div th:if="${param.success}">
+            <div class="alert alert-success">
+                Acción realizada correctamente.
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${pedidos}">
+                <td th:text="${p.id}"></td>
+                <td th:text="${#temporals.format(p.fechaPedido, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${p.estado}"></td>
+                <td th:text="${p.total}"></td>
+                <td>
+
+                    <!-- 🔥 AHORA LOS BOTONES SI APARECEN -->
+                    <a th:href="@{/pedido/editar/{id}(id=${p.id})}"
+                       th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'pagado'}"
+                       class="btn btn-warning btn-sm">
+                        Modificar
+                    </a>
+
+                    <a th:href="@{/pedido/cancelar/{id}(id=${p.id})}"
+                       th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'pagado'}"
+                       class="btn btn-danger btn-sm">
+                        Cancelar
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </main>
+
+</div>
+
+</html>

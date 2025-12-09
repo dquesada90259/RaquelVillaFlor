@@ -7,27 +7,29 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import org.springframework.context.annotation.Lazy;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsuarioService usuarioService;
 
+    // 🔥 rompiendo el ciclo usando @Lazy
+    public CustomUserDetailsService(@Lazy UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-        Usuario usuario = usuarioService.buscarPorCorreo(correo);
+        Usuario usuario = usuarioService.buscarPorCorreo(correo)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado");
-        }
-
-        // Creamos la autoridad con ROLE_ prefijo si usamos hasRole()
-        SimpleGrantedAuthority autoridad = new SimpleGrantedAuthority("ROLE_" + usuario.getRol());
+        SimpleGrantedAuthority autoridad =
+                new SimpleGrantedAuthority("ROLE_" + usuario.getRol().toUpperCase());
 
         return User.builder()
                 .username(usuario.getCorreo())
-                .password(usuario.getContrasena()) // NoOpPasswordEncoder acepta texto plano
+                .password(usuario.getContrasena())
                 .authorities(Collections.singleton(autoridad))
                 .build();
     }
