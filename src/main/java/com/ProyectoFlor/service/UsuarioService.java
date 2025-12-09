@@ -3,6 +3,9 @@ package com.ProyectoFlor.service;
 import com.ProyectoFlor.model.Usuario;
 import com.ProyectoFlor.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,13 +14,30 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    // ⚠ Este método NO sirve en producción, pero lo dejo porque ya estaba
+    /**
+     * Obtiene al usuario actualmente logueado usando Spring Security.
+     */
     public Usuario obtenerUsuarioActual() {
-        return usuarioRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("Usuario demo no encontrado"));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            return null;
+        }
+
+        Object principal = auth.getPrincipal();
+
+        if (principal instanceof UserDetails userDetails) {
+            String correo = userDetails.getUsername(); // Spring usa el correo como username
+
+            return usuarioRepository.findByCorreo(correo)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + correo));
+        }
+
+        return null;
     }
 
-    // Buscar usuario por correo (Spring Security depende de este)
+    // Buscar usuario por correo
     public Usuario buscarPorCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -29,12 +49,12 @@ public class UsuarioService {
                 .orElse(null);
     }
 
-    // Guardar cambios al usuario
+    // Guardar usuario
     public Usuario guardar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    // Login simple (ya casi no se usa gracias a Spring Security)
+    // Login simple (solo si no usas Spring Security)
     public Usuario login(String correo, String contrasena) {
         return usuarioRepository.findByCorreoAndContrasena(correo, contrasena)
                 .orElse(null);
@@ -47,11 +67,11 @@ public class UsuarioService {
             throw new RuntimeException("El correo ya está registrado");
         }
 
-        usuario.setRol("usuario"); // Rol predeterminado
+        usuario.setRol("usuario");
         return usuarioRepository.save(usuario);
     }
 
-    // Verificar si un correo ya existe
+    // Verificar si existe correo
     public boolean usuarioExiste(String correo) {
         return usuarioRepository.existsByCorreo(correo);
     }

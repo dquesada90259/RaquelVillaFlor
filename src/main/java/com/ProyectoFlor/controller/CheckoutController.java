@@ -34,6 +34,8 @@ public class CheckoutController {
         Carrito carrito = carritoService.obtenerCarritoActivo(usuario);
 
         model.addAttribute("carrito", carrito);
+        model.addAttribute("usuarioLogeado", usuario);
+
         return "checkout-entrega";
     }
 
@@ -51,9 +53,9 @@ public class CheckoutController {
         Usuario usuario = usuarioService.obtenerUsuarioActual();
         Carrito carrito = carritoService.obtenerCarritoActivo(usuario);
 
-        // =========================================================
+        // ---------------------------------------------
         // 1️⃣ ENTREGA A DOMICILIO
-        // =========================================================
+        // ---------------------------------------------
         if (metodoEntrega.equals("domicilio")) {
 
             if (direccionDomicilio == null || direccionDomicilio.trim().isEmpty()) {
@@ -77,9 +79,9 @@ public class CheckoutController {
             return "redirect:/checkout/pago";
         }
 
-        // =========================================================
-        // 2️⃣ RECOGER EN TIENDA o AGENDAR ENTREGA
-        // =========================================================
+        // ---------------------------------------------
+        // 2️⃣ RECOGER EN TIENDA o AGENDAR
+        // ---------------------------------------------
         String fechaStr = metodoEntrega.equals("recoger") ? fechaRecoger : fechaAgendar;
 
         if (fechaStr == null || fechaStr.trim().isEmpty()) {
@@ -89,7 +91,6 @@ public class CheckoutController {
         }
 
         LocalDateTime fecha;
-
         try {
             fecha = LocalDateTime.parse(fechaStr.trim());
         } catch (Exception e) {
@@ -139,6 +140,7 @@ public class CheckoutController {
 
         model.addAttribute("carrito", carrito);
         model.addAttribute("metodos", metodoPagoRepository.findAll());
+        model.addAttribute("usuarioLogeado", usuario);
 
         return "checkout-pago";
     }
@@ -156,6 +158,7 @@ public class CheckoutController {
             model.addAttribute("error", "Tu carrito está vacío.");
             model.addAttribute("carrito", carrito);
             model.addAttribute("metodos", metodoPagoRepository.findAll());
+            model.addAttribute("usuarioLogeado", usuario);
             return "checkout-pago";
         }
 
@@ -177,11 +180,15 @@ public class CheckoutController {
     // GET - MOSTRAR CONFIRMACIÓN DEL PEDIDO
     // =============================================================
     @GetMapping("/confirmacion/{id}")
-public String mostrarConfirmacion(@PathVariable Long id, Model model) {
+    public String mostrarConfirmacion(@PathVariable Long id, Model model) {
 
-    var pedido = pedidoService.obtenerPedidoPorId(id);
+        var pedido = pedidoService.obtenerPedidoPorId(id);
+        Usuario usuario = usuarioService.obtenerUsuarioActual();
 
-    model.addAttribute("pedido", pedido);
-    return "pedido-confirmacion";
-}
+        // Necesario para que el navbar muestre el usuario correcto
+        model.addAttribute("usuarioLogeado", usuario);
+
+        model.addAttribute("pedido", pedido);
+        return "pedido-confirmacion";
+    }
 }
