@@ -24,9 +24,8 @@ public class CheckoutController {
     private final UsuarioService usuarioService;
     private final MetodoPagoRepository metodoPagoRepository;
 
-    // =============================================================
-    // GET - Selección de método de entrega
-    // =============================================================
+    // Método de entrega
+
     @GetMapping("/entrega")
     public String seleccionEntrega(Model model) {
 
@@ -39,9 +38,7 @@ public class CheckoutController {
         return "checkout-entrega";
     }
 
-    // =============================================================
-    // POST - Procesar método de entrega
-    // =============================================================
+    // Procesar método de entrega
     @PostMapping("/entrega")
     public String procesarEntrega(@RequestParam String metodoEntrega,
                                   @RequestParam(required = false) String direccionDomicilio,
@@ -53,9 +50,9 @@ public class CheckoutController {
         Usuario usuario = usuarioService.obtenerUsuarioActual();
         Carrito carrito = carritoService.obtenerCarritoActivo(usuario);
 
-        // ---------------------------------------------
-        // 1️⃣ ENTREGA A DOMICILIO
-        // ---------------------------------------------
+
+        //️⃣ ENTREGA A DOMICILIO
+
         if (metodoEntrega.equals("domicilio")) {
 
             if (direccionDomicilio == null || direccionDomicilio.trim().isEmpty()) {
@@ -79,9 +76,9 @@ public class CheckoutController {
             return "redirect:/checkout/pago";
         }
 
-        // ---------------------------------------------
+
         // 2️⃣ RECOGER EN TIENDA o AGENDAR
-        // ---------------------------------------------
+
         String fechaStr = metodoEntrega.equals("recoger") ? fechaRecoger : fechaAgendar;
 
         if (fechaStr == null || fechaStr.trim().isEmpty()) {
@@ -129,9 +126,8 @@ public class CheckoutController {
         return "redirect:/checkout/pago";
     }
 
-    // =============================================================
-    // GET - Selección de pago
-    // =============================================================
+    //Selección de pago
+
     @GetMapping("/pago")
     public String seleccionarPago(Model model) {
 
@@ -145,9 +141,9 @@ public class CheckoutController {
         return "checkout-pago";
     }
 
-    // =============================================================
-    // POST - CONFIRMAR PAGO Y CREAR PEDIDO
-    // =============================================================
+
+    // cONFIRMAR PAGO Y CREAR PEDIDO
+
     @PostMapping("/pago")
     public String procesarPago(@RequestParam Long idMetodoPago, Model model) {
 
@@ -176,16 +172,15 @@ public class CheckoutController {
         return "redirect:/checkout/confirmacion/" + pedido.getId();
     }
 
-    // =============================================================
+
     // GET - MOSTRAR CONFIRMACIÓN DEL PEDIDO
-    // =============================================================
+
     @GetMapping("/confirmacion/{id}")
     public String mostrarConfirmacion(@PathVariable Long id, Model model) {
 
         var pedido = pedidoService.obtenerPedidoPorId(id);
         Usuario usuario = usuarioService.obtenerUsuarioActual();
 
-        // Necesario para que el navbar muestre el usuario correcto
         model.addAttribute("usuarioLogeado", usuario);
 
         model.addAttribute("pedido", pedido);

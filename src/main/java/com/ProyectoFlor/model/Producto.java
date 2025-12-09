@@ -37,7 +37,7 @@ public class Producto {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // 🔄 Constructores
+    // Constructores
     public Producto() {}
 
     public Producto(String nombre, String descripcion, BigDecimal precio, String imagenUrl, Categoria categoria) {
@@ -48,7 +48,7 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    // ⚙️ Getters y Setters
+    //  Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -7,7 +7,8 @@ import com.ProyectoFlor.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*; // <-- CAMBIO: importo más anotaciones
+import org.springframework.web.bind.annotation.*; 
+
 
 @Controller
 @RequiredArgsConstructor
@@ -20,21 +21,21 @@ public class PedidoController {
     @GetMapping("/confirmacion")
     public String confirmacionPedido(Model model) {
         Usuario usuario = usuarioService.obtenerUsuarioActual();
-        Pedido pedido = pedidoService.obtenerUltimoPedido(usuario); // método que devuelve el último pedido
+        Pedido pedido = pedidoService.obtenerUltimoPedido(usuario); 
         model.addAttribute("pedido", pedido);
         return "pedido-confirmacion";
     }
 
-    // ---------- NUEVO: página "Mis pedidos" ----------
+    // Mis pedidos
 
-    @GetMapping("/mis-pedidos") // URL: /pedido/mis-pedidos
+    @GetMapping("/mis-pedidos") 
     public String misPedidos(Model model) {
         Usuario usuario = usuarioService.obtenerUsuarioActual();
         model.addAttribute("pedidos", pedidoService.obtenerPedidosPorUsuario(usuario));
         return "mis-pedidos";
     }
 
-    // ---------- NUEVO: formulario para modificar pedido ----------
+    // formulario para modificar pedido
 
     @GetMapping("/editar/{id}")
     public String editarPedido(@PathVariable Long id, Model model) {
@@ -63,7 +64,7 @@ public class PedidoController {
         return "redirect:/pedido/mis-pedidos?success=edit";
     }
 
-    // ---------- NUEVO: cancelar pedido ----------
+    // cancelar pedido
 
     @GetMapping("/cancelar/{id}")
     public String cancelarPedido(@PathVariable Long id) {

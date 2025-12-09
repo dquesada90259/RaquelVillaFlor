@@ -43,7 +43,6 @@ public class Pedido {
     @Column(name = "fecha_entrega_programada")
     private LocalDateTime fechaEntregaProgramada;
 
-    // 👇 NECESARIO para evitar errores en la vista
     private String direccionEntrega;
     private String distritoEntrega;
 

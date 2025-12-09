@@ -17,7 +17,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    // ---------- REGISTRO ----------
+    //REGISTRO
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
         model.addAttribute("usuario", new Usuario());
@@ -38,7 +38,7 @@ public class UsuarioController {
         return "redirect:/usuario/login";
     }
 
-    // ---------- LOGIN ----------
+    // LOGIN
     @GetMapping("/login")
     public String loginPage(HttpSession session,
                             Model model,
@@ -51,14 +51,14 @@ public class UsuarioController {
         return "login";
     }
 
-    // ---------- Cerrar sesión ----------
+    // Cerrar sesión 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/usuario/login";
     }
 
-    // ---------- RECUPERAR CONTRASEÑA ----------
+    // RECUPERAR CONTRASEÑA
     @GetMapping("/recuperar")
     public String mostrarRecuperar() {
         return "recuperar";
@@ -89,7 +89,7 @@ public class UsuarioController {
         return "recuperar";
     }
 
-    // ---------- FORMULARIO DE RESTABLECER ----------
+    // RESTABLECER 
     @GetMapping("/restablecer")
     public String mostrarRestablecer(@RequestParam String token, Model model) {
 
@@ -105,7 +105,7 @@ public class UsuarioController {
         return "restablecer";
     }
 
-    // ---------- PROCESAR NUEVA CONTRASEÑA ----------
+    // PROCESAR NUEVA CONTRASEÑA 
     @PostMapping("/restablecer")
     public String procesarRestablecer(@RequestParam String token,
                                       @RequestParam String contrasena,

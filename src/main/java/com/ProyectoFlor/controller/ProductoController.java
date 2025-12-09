@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable; // ← agregado
+import org.springframework.web.bind.annotation.PathVariable; 
 import com.ProyectoFlor.service.ProductoService;
 import com.ProyectoFlor.service.CategoriaService;
 import com.ProyectoFlor.model.Producto;
@@ -24,8 +24,8 @@ public class ProductoController {
 
     @GetMapping({"/catalogo", "/productos"})
     public String verCatalogo(
-            @RequestParam(required = false) String ch,        // búsqueda por nombre
-            @RequestParam(required = false) Long categoriaId, // filtro por categoría
+            @RequestParam(required = false) String ch,        
+            @RequestParam(required = false) Long categoriaId, 
             Model model) {
 
         List<Producto> productos;
@@ -34,16 +34,12 @@ public class ProductoController {
         Categoria categoria = (categoriaId != null) ? categoriaService.obtenerPorId(categoriaId) : null;
 
         if (ch != null && !ch.isEmpty() && categoria != null) {
-            // Filtrar por nombre y categoría
             productos = productoService.buscarPorNombreYCategoria(ch, categoria);
         } else if (ch != null && !ch.isEmpty()) {
-            // Filtrar solo por nombre
             productos = productoService.buscarPorNombre(ch);
         } else if (categoria != null) {
-            // Filtrar solo por categoría
             productos = productoService.buscarPorCategoria(categoria);
         } else {
-            // Sin filtro
             productos = productoService.listarTodos();
         }
 
@@ -55,10 +51,9 @@ public class ProductoController {
 
         System.out.println("Lista de categorías: " + model.getAttribute("categorias"));
 
-        return "catalogo"; // Thymeleaf: catalogo.html
+        return "catalogo"; // catalogo.html
     }
 
-    // ⭐⭐⭐ AGREGADO — SIN MODIFICAR NADA DEL CÓDIGO EXISTENTE ⭐⭐⭐
     @GetMapping("/producto/{id}")
     public String verDetalle(@PathVariable Long id, Model model) {
 

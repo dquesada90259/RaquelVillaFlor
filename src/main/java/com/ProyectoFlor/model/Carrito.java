@@ -46,7 +46,7 @@ public class Carrito {
     @Column(name = "fecha_entrega_programada")
     private LocalDateTime fechaEntregaProgramada;
 
-    // 🆕 NUEVOS CAMPOS PARA DIRECCIÓN / DISTRITO DE ENTREGA
+  
     @Column(name = "direccion_entrega")
     private String direccionEntrega;
 
@@ -57,7 +57,6 @@ public class Carrito {
         activo, comprado, cancelado
     }
 
-    // Se asegura de que createdAt y updatedAt se llenen automáticamente
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();

@@ -37,7 +37,6 @@ public class PedidoService {
                 .costoEnvio(costoEnvio)
                 .fechaEntregaProgramada(fechaAgendada)
 
-                // 👇 AGREGADO: guardar dirección y distrito en el pedido
                 .direccionEntrega(carrito.getDireccionEntrega())
                 .distritoEntrega(carrito.getDistritoEntrega())
 
@@ -82,7 +81,7 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
 
-        // <-- NUEVO: misma lógica que la user story: solo si no está en entrega
+        
         if (!puedeModificar(pedido)) {
             throw new RuntimeException("El pedido ya está en proceso y no se puede modificar.");
         }
@@ -97,7 +96,6 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
 
-        // <-- NUEVO: bloquear cancelación si ya está en entrega
         if (!puedeModificar(pedido)) {
             throw new RuntimeException("El pedido ya está en proceso y no se puede cancelar.");
         }
@@ -118,10 +116,10 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
     }
 
-    // ---------- NUEVO CÓDIGO PARA "MIS PEDIDOS" Y MODIFICACIÓN COMPLETA ----------
+    // MODIFICACIÓN
 
     // Lista todos los pedidos de un usuario
-    public List<Pedido> obtenerPedidosPorUsuario(Usuario usuario) { // <-- NUEVO
+    public List<Pedido> obtenerPedidosPorUsuario(Usuario usuario) { 
         return pedidoRepository.findByUsuario(usuario);
     }
 
@@ -134,7 +132,7 @@ public class PedidoService {
 
     // Modificar datos del pedido (fecha, dirección, método, distrito)
     @Transactional
-    public Pedido modificarPedidoCompleto( // <-- NUEVO
+    public Pedido modificarPedidoCompleto( 
             Long idPedido,
             String nuevoMetodoEntrega,
             String nuevaDireccion,

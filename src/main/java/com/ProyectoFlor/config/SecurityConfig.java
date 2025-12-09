@@ -29,7 +29,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> {
 
-            // Rutas públicas fijas
+            // Rutas fijas
             auth.requestMatchers(
                     "/", "/index", "/home",
                     "/catalogo", "/productos/**",
@@ -40,7 +40,7 @@ public class SecurityConfig {
             // Recursos estáticos
             auth.requestMatchers("/css/**", "/js/**", "/img/**").permitAll();
 
-            // Recuperar/restablecer CONTRASEÑA SIEMPRE accesible sin login
+            // Recuperar/restablecer 
             auth.requestMatchers(
                     "/usuario/recuperar",
                     "/usuario/recuperar/**",
@@ -48,7 +48,7 @@ public class SecurityConfig {
                     "/usuario/restablecer/**"
             ).permitAll();
 
-            // 🔥 PERMITIR TODAS LAS RUTAS DEL CARRITO para evitar errores 405
+
             auth.requestMatchers(
                     "/carrito/**",
                     "/carrito/agregar/**",
@@ -72,7 +72,7 @@ public class SecurityConfig {
                 }
             }
 
-            // Todo lo demás requiere autenticación
+            // Auntenticacion 
             auth.anyRequest().authenticated();
         });
 
@@ -99,14 +99,14 @@ public class SecurityConfig {
         // ACCESO DENEGADO
         http.exceptionHandling(e -> e.accessDeniedPage("/acceso_denegado"));
 
-        // CONTROL DE SESIÓN — Expiración por inactividad
+        // CONTROL DE SESION
         http.sessionManagement(session -> session
                 .invalidSessionUrl("/usuario/login?expired=true")
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
         );
 
-        // Desactivar CSRF para facilitar pruebas
+        // Desactivar CSRF para  pruebas
         http.csrf(csrf -> csrf.disable());
 
         return http.build();

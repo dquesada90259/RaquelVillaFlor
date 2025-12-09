@@ -56,7 +56,7 @@ public class Usuario implements UserDetails {
     public String getTokenRecuperacion() { return tokenRecuperacion; }
     public void setTokenRecuperacion(String tokenRecuperacion) { this.tokenRecuperacion = tokenRecuperacion; }
 
-    // --- Métodos de UserDetails ---
+    //Métodos
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.rol.toUpperCase()));

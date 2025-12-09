@@ -14,7 +14,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsuarioService usuarioService;
 
-    // 🔥 rompiendo el ciclo usando @Lazy
     public CustomUserDetailsService(@Lazy UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }

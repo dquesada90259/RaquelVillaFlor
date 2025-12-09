@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
-@ControllerAdvice   // <- ANTES tenías @Controller
+@ControllerAdvice   
 public class UsuarioSessionController {
 
     private final UsuarioService usuarioService;
@@ -20,7 +20,6 @@ public class UsuarioSessionController {
         if (authentication != null && authentication.isAuthenticated()
                 && !"anonymousUser".equals(authentication.getName())) {
 
-            // 🔥 CORREGIDO → obtenemos el usuario real desde Optional
             return usuarioService.buscarPorCorreo(authentication.getName())
                     .orElse(null);
         }
