@@ -48,7 +48,6 @@ public class UsuarioService {
      */
     public Usuario registrar(Usuario usuario) {
 
-        // 🔥🔥 AGREGADO — Asignar rol USER por defecto si viene vacío o null
         if (usuario.getRol() == null || usuario.getRol().isBlank()) {
             usuario.setRol("USER");
         }
@@ -129,10 +128,6 @@ public class UsuarioService {
         usuario.setTokenRecuperacion(null);
         usuarioRepository.save(usuario);
     }
-
-    // ---------------------------------------------------------
-    // 🔥 MÉTODOS NECESARIOS PARA CORREGIR TUS ERRORES DE COMPILACIÓN
-    // ---------------------------------------------------------
 
     /**
      * Usado por UsuarioController (evitaba compilar).
