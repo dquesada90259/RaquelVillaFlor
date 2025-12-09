@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable; // ← agregado
 import com.ProyectoFlor.service.ProductoService;
 import com.ProyectoFlor.service.CategoriaService;
 import com.ProyectoFlor.model.Producto;
@@ -51,9 +52,23 @@ public class ProductoController {
         model.addAttribute("categorias", categoriaService.listarTodas());
         model.addAttribute("busqueda", ch != null ? ch : "");
         model.addAttribute("categoriaSeleccionada", categoriaId);
-        
+
         System.out.println("Lista de categorías: " + model.getAttribute("categorias"));
 
         return "catalogo"; // Thymeleaf: catalogo.html
+    }
+
+    // ⭐⭐⭐ AGREGADO — SIN MODIFICAR NADA DEL CÓDIGO EXISTENTE ⭐⭐⭐
+    @GetMapping("/producto/{id}")
+    public String verDetalle(@PathVariable Long id, Model model) {
+
+        Producto producto = productoService.obtenerPorId(id);
+
+        if (producto == null) {
+            return "redirect:/catalogo"; // Si el ID no existe
+        }
+
+        model.addAttribute("producto", producto);
+        return "producto-detalle"; // Vista de detalles
     }
 }

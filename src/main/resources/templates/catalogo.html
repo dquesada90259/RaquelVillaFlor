@@ -125,26 +125,34 @@
             <div class="container py-4">
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-3 col-sm-6" th:each="producto : ${productos}">
-                        <div class="card product-card">
-                            <img th:src="@{${producto.imagenUrl}}" class="card-img-top"
-                                 th:alt="${producto.nombre}">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${producto.nombre}"></h5>
-                                <p class="card-text" th:text="${producto.descripcion}"></p>
-                                <p class="fw-bold text-danger"
-                                   th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 2, 'POINT')} + '₡'"></p>
 
-                                <!-- SOLO LOS USUARIOS NORMALES PUEDEN VER "COMPRAR" -->
-                                <div th:if="${usuarioLogeado == null or !usuarioLogeado.rol.equalsIgnoreCase('ADMIN')}">
-                                    <form th:action="@{/carrito/agregar}" method="post">
-                                        <input type="hidden" name="idProducto" th:value="${producto.id}">
-                                        <input type="hidden" name="cantidad" value="1">
-                                        <button type="submit" class="btn-comprar">Comprar</button>
-                                    </form>
+                        <!-- ⬇️⬇️ ÚNICO CAMBIO: HACER LA TARJETA CLICKEABLE PARA VER DETALLES -->
+                        <a th:href="@{/producto/{id}(id=${producto.id})}" style="text-decoration:none; color:inherit;">
+
+                            <div class="card product-card">
+                                <img th:src="@{${producto.imagenUrl}}" class="card-img-top"
+                                     th:alt="${producto.nombre}">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${producto.nombre}"></h5>
+                                    <p class="card-text" th:text="${producto.descripcion}"></p>
+                                    <p class="fw-bold text-danger"
+                                       th:text="${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 2, 'POINT')} + '₡'"></p>
+
+                                    <!-- SOLO LOS USUARIOS NORMALES PUEDEN VER "COMPRAR" -->
+                                    <div th:if="${usuarioLogeado == null or !usuarioLogeado.rol.equalsIgnoreCase('ADMIN')}">
+                                        <form th:action="@{/carrito/agregar}" method="post">
+                                            <input type="hidden" name="idProducto" th:value="${producto.id}">
+                                            <input type="hidden" name="cantidad" value="1">
+                                            <button type="submit" class="btn-comprar">Comprar</button>
+                                        </form>
+                                    </div>
+
                                 </div>
-
                             </div>
-                        </div>
+
+                        </a>
+                        <!-- ⬆️⬆️ FIN DEL ÚNICO CAMBIO -->
+
                     </div>
                 </div>
             </div>
