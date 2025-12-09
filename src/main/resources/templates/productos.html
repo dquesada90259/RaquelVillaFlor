@@ -108,7 +108,8 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${producto.nombre}">Producto</h5>
                                 <p class="card-text" th:text="${producto.descripcion}">Descripción</p>
-                                <p class="fw-bold text-danger" th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 2, 'POINT')}"></p>
+                                <p class="fw-bold text-danger"
+                                   th:text="'₡' + #numbers.formatDecimal(producto.precio, 2, POINT)"></p>
                                 <form th:action="@{/carrito/agregar}" method="post">
                                     <input type="hidden" name="productoId" th:value="${producto.id}" />
                                     <button type="submit" class="btn-comprar">Comprar</button>

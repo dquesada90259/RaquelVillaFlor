@@ -2,190 +2,193 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es" 
       th:replace="~{base :: Layout(~{::content})}">
 
-<div th:fragment="content">
+    <div th:fragment="content">
 
-    <main class="container mt-5">
+        <main class="container mt-5">
 
-        <h2 class="mb-4 text-center">Selecciona el método de entrega</h2>
+            <h2 class="mb-4 text-center">Selecciona el método de entrega</h2>
 
-        <!-- MENSAJE DE ERROR -->
-        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+            <!-- MENSAJE DE ERROR -->
+            <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
 
-        <form th:action="@{/checkout/entrega}" method="post" id="formEntrega">
+            <form th:action="@{/checkout/entrega}" method="post" id="formEntrega">
 
-            <!-- MÉTODO DE ENTREGA -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Método de entrega:</label>
-                <select name="metodoEntrega" id="metodoEntrega" class="form-select" required>
-                    <option value="">Seleccione una opción</option>
-                    <option value="domicilio">Entrega a Domicilio</option>
-                    <option value="recoger">Recoger en tienda</option>
-                    <option value="agendar">Agendar entrega</option>
-                </select>
-            </div>
-
-            <!-- ==========================
-                 ENTREGA A DOMICILIO
-            =========================== -->
-            <div id="domicilioCampos" class="mt-3" style="display:none;">
-
-                <h5 class="fw-bold">Entrega a domicilio</h5>
-
-                <p class="text-muted">Los envíos solo están disponibles para los siguientes distritos.  
-                   Zonas fuera de esta lista deben coordinar envío por separado.</p>
-
-                <!-- Dirección exacta -->
+                <!-- MÉTODO DE ENTREGA -->
                 <div class="mb-3">
-                    <label class="form-label">Dirección exacta:</label>
-                    <input type="text" class="form-control" id="direccionDomicilio"
-                           name="direccionDomicilio"
-                           placeholder="Ej: 200m norte de la iglesia..." />
-                </div>
-
-                <!-- Distritos -->
-                <div class="mb-3">
-                    <label class="form-label">Distrito:</label>
-                    <select name="distrito" id="distrito" class="form-select">
-                        <option value="">Seleccione distrito</option>
-                        <option>San Isidro de El General</option>
-                        <option>El General (General Viejo)</option>
-                        <option>Daniel Flores</option>
-                        <option>Rivas</option>
+                    <label class="form-label fw-bold">Método de entrega:</label>
+                    <select name="metodoEntrega" id="metodoEntrega" class="form-select" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="domicilio">Entrega a Domicilio</option>
+                        <option value="recoger">Recoger en tienda</option>
+                        <option value="agendar">Agendar entrega</option>
                     </select>
-
-                    <!-- ⭐ TEXTO DE COSTO DE ENVÍO (AGREGADO) -->
-                    <p id="textoCostoEnvio" class="text-primary fw-bold mt-2"></p>
                 </div>
 
-            </div>
+                <!-- ==========================
+                     ENTREGA A DOMICILIO
+                =========================== -->
+                <div id="domicilioCampos" class="mt-3" style="display:none;">
 
-            <!-- ==========================
-                 RECOGER EN TIENDA
-            =========================== -->
-            <div id="recogerCampos" class="mt-3" style="display:none;">
+                    <h5 class="fw-bold">Entrega a domicilio</h5>
 
-                <h5 class="fw-bold">Recoger en tienda</h5>
+                    <p class="text-muted">Los envíos solo están disponibles para los siguientes distritos.  
+                        Zonas fuera de esta lista deben coordinar envío por separado.</p>
 
-                <p class="text-muted">
-                    Dirección: <br>
-                    <strong>Contiguo a Restaurante The Reef, Daniel Flores, San José, San Isidro de El General.</strong>
-                </p>
+                    <!-- Dirección exacta -->
+                    <div class="mb-3">
+                        <label class="form-label">Dirección exacta:</label>
+                        <input type="text" class="form-control" id="direccionDomicilio"
+                               name="direccionDomicilio"
+                               placeholder="Ej: 200m norte de la iglesia..." />
+                    </div>
 
-                <!-- Fecha y hora -->
-                <div class="mb-3">
-                    <label class="form-label">Seleccione fecha y hora:</label>
-                    <input type="datetime-local" class="form-control"
-                           id="fechaRecoger"
-                           name="fechaRecoger" />
-                    <p class="text-muted mt-1">
-                        No se realizan entregas domingos, feriados ni fuera del horario (8am–7pm).
+                    <!-- Distritos -->
+                    <div class="mb-3">
+                        <label class="form-label">Distrito:</label>
+                        <select name="distrito" id="distrito" class="form-select">
+                            <option value="">Seleccione distrito</option>
+                            <option>San Isidro de El General</option>
+                            <option>El General (General Viejo)</option>
+                            <option>Daniel Flores</option>
+                            <option>Rivas</option>
+                        </select>
+
+                        <!-- ⭐ TEXTO DE COSTO DE ENVÍO (AGREGADO) -->
+                        <p id="textoCostoEnvio" class="text-primary fw-bold mt-2"></p>
+                    </div>
+
+                </div>
+
+                <!-- ==========================
+                     RECOGER EN TIENDA
+                =========================== -->
+                <div id="recogerCampos" class="mt-3" style="display:none;">
+
+                    <h5 class="fw-bold">Recoger en tienda</h5>
+
+                    <p class="text-muted">
+                        Dirección: <br>
+                        <strong>Contiguo a Restaurante The Reef, Daniel Flores, San José, San Isidro de El General.</strong>
                     </p>
+
+                    <!-- Fecha y hora -->
+                    <div class="mb-3">
+                        <label class="form-label">Seleccione fecha y hora:</label>
+                        <input type="datetime-local" class="form-control"
+                               id="fechaRecoger"
+                               name="fechaRecoger" />
+                        <p class="text-muted mt-1">
+                            No se realizan entregas domingos, feriados ni fuera del horario (8am–7pm).
+                        </p>
+                    </div>
+
                 </div>
 
-            </div>
+                <!-- ==========================
+                     AGENDAR ENTREGA
+                =========================== -->
+                <div id="agendarCampos" class="mt-3" style="display:none;">
 
-            <!-- ==========================
-                 AGENDAR ENTREGA
-            =========================== -->
-            <div id="agendarCampos" class="mt-3" style="display:none;">
+                    <h5 class="fw-bold">Agendar entrega</h5>
 
-                <h5 class="fw-bold">Agendar entrega</h5>
+                    <!-- Fecha y hora -->
+                    <div class="mb-3">
+                        <label class="form-label">Seleccione fecha y hora:</label>
+                        <input type="datetime-local" class="form-control"
+                               id="fechaAgendar"
+                               name="fechaAgendar" />
+                        <p class="text-muted mt-1">
+                            No se realizan entregas domingos, feriados ni fuera del horario (8am–7pm).
+                        </p>
+                    </div>
 
-                <!-- Fecha y hora -->
-                <div class="mb-3">
-                    <label class="form-label">Seleccione fecha y hora:</label>
-                    <input type="datetime-local" class="form-control"
-                           id="fechaAgendar"
-                           name="fechaAgendar" />
-                    <p class="text-muted mt-1">
-                        No se realizan entregas domingos, feriados ni fuera del horario (8am–7pm).
-                    </p>
                 </div>
 
-            </div>
+                <button type="submit" class="btn btn-primary mt-4"
+                        style="background-color: #d3006b; border-color: #d3006b;">
+                    Continuar a pago
+                </button>
+            </form>
 
-            <button type="submit" class="btn btn-primary mt-4">Continuar a pago</button>
-        </form>
+        </main>
 
-    </main>
+        <!-- ==========================
+             SCRIPT DINÁMICO
+        =========================== -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
 
-    <!-- ==========================
-         SCRIPT DINÁMICO
-    =========================== -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+                const metodoSelect = document.getElementById("metodoEntrega");
 
-            const metodoSelect = document.getElementById("metodoEntrega");
+                const domicilioCampos = document.getElementById("domicilioCampos");
+                const recogerCampos = document.getElementById("recogerCampos");
+                const agendarCampos = document.getElementById("agendarCampos");
 
-            const domicilioCampos = document.getElementById("domicilioCampos");
-            const recogerCampos = document.getElementById("recogerCampos");
-            const agendarCampos = document.getElementById("agendarCampos");
+                const direccion = document.getElementById("direccionDomicilio");
+                const fechaRecoger = document.getElementById("fechaRecoger");
+                const fechaAgendar = document.getElementById("fechaAgendar");
 
-            const direccion = document.getElementById("direccionDomicilio");
-            const fechaRecoger = document.getElementById("fechaRecoger");
-            const fechaAgendar = document.getElementById("fechaAgendar");
+                function actualizarCampos() {
 
-            function actualizarCampos() {
+                    domicilioCampos.style.display = "none";
+                    recogerCampos.style.display = "none";
+                    agendarCampos.style.display = "none";
 
-                domicilioCampos.style.display = "none";
-                recogerCampos.style.display = "none";
-                agendarCampos.style.display = "none";
+                    direccion.required = false;
+                    fechaRecoger.required = false;
+                    fechaAgendar.required = false;
 
-                direccion.required = false;
-                fechaRecoger.required = false;
-                fechaAgendar.required = false;
-
-                if (metodoSelect.value === "domicilio") {
-                    domicilioCampos.style.display = "block";
-                    direccion.required = true;
-                }
-                if (metodoSelect.value === "recoger") {
-                    recogerCampos.style.display = "block";
-                    fechaRecoger.required = true;
-                }
-                if (metodoSelect.value === "agendar") {
-                    agendarCampos.style.display = "block";
-                    fechaAgendar.required = true;
-                }
-            }
-
-            metodoSelect.addEventListener("change", actualizarCampos);
-
-
-
-            // ⭐ COSTO DE ENVÍO SEGÚN DISTRITO (solo texto)
-            const textoCostoEnvio = document.getElementById("textoCostoEnvio");
-
-            document.getElementById("distrito").addEventListener("change", function () {
-                const distrito = this.value;
-                let costo = 0;
-
-                switch (distrito) {
-                    case "San Isidro de El General":
-                        costo = 2000;
-                        break;
-                    case "El General (General Viejo)":
-                        costo = 2500;
-                        break;
-                    case "Daniel Flores":
-                        costo = 1500;
-                        break;
-                    case "Rivas":
-                        costo = 3000;
-                        break;
-                    default:
-                        costo = 0;
+                    if (metodoSelect.value === "domicilio") {
+                        domicilioCampos.style.display = "block";
+                        direccion.required = true;
+                    }
+                    if (metodoSelect.value === "recoger") {
+                        recogerCampos.style.display = "block";
+                        fechaRecoger.required = true;
+                    }
+                    if (metodoSelect.value === "agendar") {
+                        agendarCampos.style.display = "block";
+                        fechaAgendar.required = true;
+                    }
                 }
 
-                if (costo > 0) {
-                    textoCostoEnvio.textContent = "Costo de envío: ₡" + costo;
-                } else {
-                    textoCostoEnvio.textContent = "";
-                }
+                metodoSelect.addEventListener("change", actualizarCampos);
+
+
+
+                // ⭐ COSTO DE ENVÍO SEGÚN DISTRITO (solo texto)
+                const textoCostoEnvio = document.getElementById("textoCostoEnvio");
+
+                document.getElementById("distrito").addEventListener("change", function () {
+                    const distrito = this.value;
+                    let costo = 0;
+
+                    switch (distrito) {
+                        case "San Isidro de El General":
+                            costo = 2000;
+                            break;
+                        case "El General (General Viejo)":
+                            costo = 2500;
+                            break;
+                        case "Daniel Flores":
+                            costo = 1500;
+                            break;
+                        case "Rivas":
+                            costo = 3000;
+                            break;
+                        default:
+                            costo = 0;
+                    }
+
+                    if (costo > 0) {
+                        textoCostoEnvio.textContent = "Costo de envío: ₡" + costo;
+                    } else {
+                        textoCostoEnvio.textContent = "";
+                    }
+                });
+
             });
+        </script>
 
-        });
-    </script>
-
-</div>
+    </div>
 </html>

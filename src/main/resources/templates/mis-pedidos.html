@@ -40,21 +40,21 @@
 
                     <!-- 🔥 BOTONES SOLO PARA pendiente O pagado -->
                     <a th:href="@{/pedido/editar/{id}(id=${p.id})}"
-                       th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'pagado'}"
+                       th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'Pagado'}"
                        class="btn btn-warning btn-sm">
                         Modificar
                     </a>
 
                     <a th:href="@{/pedido/cancelar/{id}(id=${p.id})}"
-                       th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'pagado'}"
+                       th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'Pagado'}"
                        class="btn btn-danger btn-sm">
                         Cancelar
                     </a>
 
                     <!-- 🔥 NUEVO: Mensaje cuando YA NO se puede modificar -->
-                    <span th:if="${p.estado.name() == 'enviado' or p.estado.name() == 'entregado'}"
+                    <span th:if="${p.estado.name() == 'enviado' or p.estado.name() == 'Entregado'}"
                           class="badge bg-secondary">
-                        No modificable
+                        No Modificable
                     </span>
 
                 </td>

@@ -5,39 +5,33 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            .portada-img {
+                height: 350px;
+                width: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+        </style>
     </head>
+
     <body>
         <section>
-            <!-- Start Slider -->
-            <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="img/Flores4.png" class="d-block w-100" alt="..." height="350px">
-                    </div>
-                    <div class="carousel-item active">
-                        <img src="img/Flores2.jpg" class="d-block w-100" alt="..." height="350px">
-                    </div>
-                    <div class="carousel-item active">
-                        <img src="img/Flores3.jpg" class="d-block w-100" alt="..." height="350px">
-                    </div>
 
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+            <!-- Imagen fija de portada -->
+            <div class="w-100">
+                <img src="img/MI_NUEVA_IMAGEN.jpg" class="portada-img d-block w-100" alt="Portada">
             </div>
             <!-- End Slider -->
 
+
             <!-- Start Category Module -->
-            <div class="container">
-                <p class="text-co fs-4">Categorías</p>
+            <div class="container mb-5">
+                <p class="text-co fs-4 text-center">Categorías</p>
+
                 <div class="row justify-content-center">
-                    
+
                     <!-- FLORES -->
                     <div class="col-md-2">
                         <a th:href="@{/productos(categoriaId=1)}" style="text-decoration:none; color:inherit;">
@@ -102,9 +96,9 @@
             </div>
             <!-- End Category Module -->
 
-            <!-- Start Latest Product Module -->
 
-            <div class="container-fluid bg-light p-3">
+            <!-- Start Latest Product Module -->
+            <div class="container-fluid bg-light p-3 mt-5">
                 <div class="row">
                     <p class="text-center fs-4">Nuevos Productos</p>
 
@@ -129,6 +123,7 @@
                 </div>
             </div>
             <!-- End Latest Product Module -->
+
         </section>
     </body>
 </html>

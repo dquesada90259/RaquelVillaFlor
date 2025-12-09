@@ -2,92 +2,95 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::Layout(~{::section})}">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Iniciar Sesión</title>
+    </head>
 
-<body>
-<section>
-    <div class="container mt-5 p-5">
-        <div class="row">
+    <body>
+        <section>
+            <div class="container mt-5 p-5">
+                <div class="row">
 
-            <!-- Imagen -->
-            <div class="col-md-6 p-5">
-                <img src="/img/Flores2.jpg" alt="Flores" class="img-fluid"
-                     style="height: 400px; object-fit: cover;">
-            </div>
-
-            <!-- Login Card -->
-            <div class="col-md-6 d-flex align-items-center justify-content-center">
-                <div class="card w-100 p-4 shadow">
-
-                    <div class="card-header text-center">
-                        <p class="fs-4 mb-0">Iniciar Sesión</p>
+                    <!-- Imagen -->
+                    <div class="col-md-6 p-5">
+                        <img src="/img/Flores2.jpg" alt="Flores" class="img-fluid"
+                             style="height: 400px; object-fit: cover;">
                     </div>
 
-                    <div class="card-body">
+                    <!-- Login Card -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="card w-100 p-4 shadow">
 
-                        <!-- Mostrar error de Spring Security -->
-                        <div th:if="${param.error}" 
-                             class="alert alert-danger text-center">
-                            Correo o contraseña incorrectos.
-                        </div>
-
-                        <!-- Mensaje de cierre por inactividad -->
-                        <div th:if="${sessionExpired}" class="alert alert-info text-center"
-                             th:text="${sessionExpired}">
-                        </div>
-
-                        <!-- Mensaje cuando el usuario cerró sesión -->
-                        <div th:if="${param.logout}" class="alert alert-success text-center">
-                            Has cerrado sesión correctamente.
-                        </div>
-
-                        <form th:action="@{/usuario/login}" method="post">
-
-                            <!-- Email -->
-                            <div class="mb-3">
-                                <label class="form-label">Correo</label>
-                                <input class="form-control"
-                                       name="correo"
-                                       type="email"
-                                       placeholder="Ingresa tu correo"
-                                       required>
+                            <div class="card-header text-center">
+                                <p class="fs-4 mb-0">Iniciar Sesión</p>
                             </div>
 
-                            <!-- Password -->
-                            <div class="mb-3">
-                                <label class="form-label">Contraseña</label>
-                                <input class="form-control"
-                                       name="contrasena"
-                                       type="password"
-                                       placeholder="Ingresa tu contraseña"
-                                       required>
+                            <div class="card-body">
+
+                                <!-- Mostrar error de Spring Security -->
+                                <div th:if="${param.error}" 
+                                     class="alert alert-danger text-center">
+                                    Correo o contraseña incorrectos.
+                                </div>
+
+                                <!-- Mensaje de cierre por inactividad -->
+                                <div th:if="${sessionExpired}" class="alert alert-info text-center"
+                                     th:text="${sessionExpired}">
+                                </div>
+
+                                <!-- Mensaje cuando el usuario cerró sesión -->
+                                <div th:if="${param.logout}" class="alert alert-success text-center">
+                                    Has cerrado sesión correctamente.
+                                </div>
+
+                                <form th:action="@{/usuario/login}" method="post">
+
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Correo</label>
+                                        <input class="form-control"
+                                               name="correo"
+                                               type="email"
+                                               placeholder="Ingresa tu correo"
+                                               required>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Contraseña</label>
+                                        <input class="form-control"
+                                               name="contrasena"
+                                               type="password"
+                                               placeholder="Ingresa tu contraseña"
+                                               required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100" 
+                                            style="background-color: #d3006b; border-color: #d3006b;">
+                                        Iniciar Sesión
+                                    </button>
+                                </form>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-                        </form>
-                    </div>
+                            <div class="card-footer text-center">
+                                <a th:href="@{/usuario/recuperar}" class="text-decoration-none">
+                                    ¿Olvidaste tu contraseña?
+                                </a>
+                                <br>
+                                ¿No tienes una cuenta?
+                                <a th:href="@{/usuario/registro}" class="text-decoration-none">
+                                    Crear una cuenta
+                                </a>
+                            </div>
 
-                    <div class="card-footer text-center">
-                        <a th:href="@{/usuario/recuperar}" class="text-decoration-none">
-                            ¿Olvidaste tu contraseña?
-                        </a>
-                        <br>
-                        ¿No tienes una cuenta?
-                        <a th:href="@{/usuario/registro}" class="text-decoration-none">
-                            Crear una cuenta
-                        </a>
+                        </div>
                     </div>
 
                 </div>
             </div>
-
-        </div>
-    </div>
-</section>
-</body>
+        </section>
+    </body>
 
 </html>
