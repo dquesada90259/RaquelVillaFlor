@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByUsuario(Usuario usuario);
+    
+    List<Pedido> findByEstado(Pedido.EstadoPedido estado);
+    
 }

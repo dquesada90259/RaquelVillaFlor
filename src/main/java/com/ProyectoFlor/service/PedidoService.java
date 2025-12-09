@@ -5,10 +5,11 @@ import com.ProyectoFlor.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import jakarta.annotation.PostConstruct;
+import java.util.concurrent.*;
 import java.util.Comparator;
 import java.time.LocalDateTime;
-import java.util.List; // <-- NUEVO
+import java.util.List; 
 
 @Service
 @RequiredArgsConstructor
@@ -153,4 +154,23 @@ public class PedidoService {
 
         return pedidoRepository.save(pedido);
     }
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    @PostConstruct
+    public void iniciarTareasProgramadas() {
+        scheduler.scheduleAtFixedRate(() -> {
+            List<Pedido> pendientes = pedidoRepository.findByEstado(Pedido.EstadoPedido.pendiente);
+
+            for (Pedido p : pendientes) {
+                // Si ya pasaron al menos 20 segundos desde su creación
+                if (p.getFechaPedido().isBefore(LocalDateTime.now().minusSeconds(20))) {
+                    p.setEstado(Pedido.EstadoPedido.enviado);
+                    pedidoRepository.save(p);
+                }
+            }
+
+        }, 5, 5, TimeUnit.SECONDS);  // revisa cada 5 segundos
+    }
 }
+

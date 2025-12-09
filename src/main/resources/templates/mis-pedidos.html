@@ -38,7 +38,7 @@
                 <td th:text="${p.total}"></td>
                 <td>
 
-                    <!-- 🔥 AHORA LOS BOTONES SI APARECEN -->
+                    <!-- 🔥 BOTONES SOLO PARA pendiente O pagado -->
                     <a th:href="@{/pedido/editar/{id}(id=${p.id})}"
                        th:if="${p.estado.name() == 'pendiente' or p.estado.name() == 'pagado'}"
                        class="btn btn-warning btn-sm">
@@ -50,6 +50,12 @@
                        class="btn btn-danger btn-sm">
                         Cancelar
                     </a>
+
+                    <!-- 🔥 NUEVO: Mensaje cuando YA NO se puede modificar -->
+                    <span th:if="${p.estado.name() == 'enviado' or p.estado.name() == 'entregado'}"
+                          class="badge bg-secondary">
+                        No modificable
+                    </span>
 
                 </td>
             </tr>
