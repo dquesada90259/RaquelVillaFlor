@@ -4,60 +4,116 @@
 
 <div th:fragment="content">
 
-    <main class="container mt-5">
+    <main class="container mt-5 mb-5">
 
-        <h2 class="mb-4">Modificar pedido</h2>
+        <div class="card shadow-lg p-4" style="border-radius: 20px; background: linear-gradient(145deg, #ffffff, #f9f9f9);">
 
-        <form th:action="@{/pedido/editar/{id}(id=${pedido.id})}" method="post">
+            <h2 class="mb-4 text-center" style="color: var(--verde-oscuro); font-weight:800; text-shadow: 1px 1px 2px #ccc;">
+                Modificar pedido
+            </h2>
 
-            <div class="mb-3">
-                <label class="form-label">Método de entrega</label>
-                <select name="metodoEntrega" class="form-control">
+            <form th:action="@{/pedido/editar/{id}(id=${pedido.id})}" method="post">
 
-                    <option 
-                        th:selected="${pedido.metodoEntrega != null 
-                                      and pedido.metodoEntrega.equals('Entrega a domicilio')}">
-                        Entrega a domicilio
-                    </option>
+                <!-- MÉTODO DE ENTREGA -->
+                <div class="mb-4 p-3" style="background: var(--rosa-suave); border-radius: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                    <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Método de entrega</label>
+                    <select name="metodoEntrega" class="form-control form-control-lg" style="border-radius: 12px; padding: 10px;">
+                        <option th:selected="${pedido.metodoEntrega != null and pedido.metodoEntrega.equals('Entrega a domicilio')}">
+                            Entrega a domicilio
+                        </option>
+                        <option th:selected="${pedido.metodoEntrega != null and pedido.metodoEntrega.equals('Recoger en Tienda')}">
+                            Recoger en Tienda
+                        </option>
+                        <option th:selected="${pedido.metodoEntrega != null and pedido.metodoEntrega.equals('Agendar para después')}">
+                            Agendar para después
+                        </option>
+                    </select>
+                </div>
 
-                    <option 
-                        th:selected="${pedido.metodoEntrega != null 
-                                      and pedido.metodoEntrega.equals('Recoger en Tienda')}">
-                        Recoger en Tienda
-                    </option>
+                <!-- DIRECCIÓN Y DISTRITO -->
+                <div class="mb-4 row g-3">
+                    <div class="col-md-6" style="background: var(--blanco); padding:15px; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Dirección de entrega</label>
+                        <input type="text" name="direccionEntrega" class="form-control" th:value="${pedido.direccionEntrega}" style="border-radius:10px; padding:8px;">
+                    </div>
+                    <div class="col-md-6" style="background: var(--blanco); padding:15px; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Distrito</label>
+                        <input type="text" name="distritoEntrega" class="form-control" th:value="${pedido.distritoEntrega}" style="border-radius:10px; padding:8px;">
+                    </div>
+                </div>
 
-                    <option 
-                        th:selected="${pedido.metodoEntrega != null 
-                                      and pedido.metodoEntrega.equals('Agendar para después')}">
-                        Agendar para después
-                    </option>
+                <!-- FECHA PROGRAMADA -->
+                <div class="mb-4 p-3" style="background: var(--gris-claro); border-radius: 15px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">
+                    <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Fecha programada</label>
+                    <input type="datetime-local" name="fechaEntregaProgramada" class="form-control"
+                           th:value="${pedido.fechaEntregaProgramada != null ? #temporals.format(pedido.fechaEntregaProgramada, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                           style="border-radius:10px; padding:8px;">
+                </div>
 
-                </select>
-            </div>
+                <hr class="my-4" style="border-top: 2px dashed var(--verde);">
 
-            <div class="mb-3">
-                <label class="form-label">Dirección de entrega</label>
-                <input type="text" name="direccionEntrega" class="form-control"
-                       th:value="${pedido.direccionEntrega}"/>
-            </div>
+                <!-- PERSONALIZACIÓN -->
+                <h4 class="mb-3 text-center" style="color: var(--verde-oscuro); font-weight:800; text-shadow: 1px 1px 2px #ddd;">
+                    Personalización del arreglo
+                </h4>
 
-            <div class="mb-3">
-                <label class="form-label">Distrito</label>
-                <input type="text" name="distritoEntrega" class="form-control"
-                       th:value="${pedido.distritoEntrega}"/>
-            </div>
+                <div class="mb-4 p-3" style="background: #e6f2f1; border-radius: 15px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">
+                    <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Tipo de arreglo</label>
+                    <select name="tipoArreglo" class="form-control" th:value="${personalizacion.tipoArreglo}" style="border-radius:12px; padding:10px;">
+                        <option value="ramo" th:selected="${personalizacion.tipoArreglo == 'ramo'}">Ramo</option>
+                        <option value="caja" th:selected="${personalizacion.tipoArreglo == 'caja'}">Caja</option>
+                        <option value="florero" th:selected="${personalizacion.tipoArreglo == 'florero'}">Florero</option>
+                        <option value="canasta" th:selected="${personalizacion.tipoArreglo == 'canasta'}">Canasta</option>
+                    </select>
+                </div>
 
-            <div class="mb-3">
-                <label class="form-label">Fecha programada</label>
-                <input type="datetime-local" name="fechaEntregaProgramada"
-                       class="form-control"
-                       th:value="${pedido.fechaEntregaProgramada != null ?
-                                 #temporals.format(pedido.fechaEntregaProgramada, 'yyyy-MM-dd''T''HH:mm') : ''}"/>
-            </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Color principal</label>
+                    <input type="text" name="colorPrincipal" class="form-control"
+                           placeholder="Ej: Rojo, Blanco, Azul"
+                           th:value="${personalizacion.colorPrincipal}" style="border-radius:10px; padding:10px; background-color:#fff9f9;">
+                </div>
 
-            <button type="submit" class="btn btn-success mt-3">Guardar cambios</button>
+                <!-- MENSAJE PERSONALIZADO -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Mensaje personalizado</label>
+                    <textarea name="mensaje" class="form-control" rows="3"
+                              placeholder="Escribe el mensaje para la tarjeta"
+                              th:text="${personalizacion.mensaje}" style="border-radius:10px; padding:10px; background-color:#fff9f9;"></textarea>
+                </div>
 
-        </form>
+                <div class="mb-4 p-3" style="background: #fef7f7; border-radius:15px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                    <label class="form-label fw-bold" style="color: var(--verde-oscuro);">Complementos</label>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="complementos" value="peluche"
+                               th:checked="${personalizacion.complementos != null and personalizacion.complementos.contains('peluche')}">
+                        <label class="form-check-label">Peluche</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="complementos" value="chocolates"
+                               th:checked="${personalizacion.complementos != null and personalizacion.complementos.contains('chocolates')}">
+                        <label class="form-check-label">Chocolates</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="complementos" value="globo"
+                               th:checked="${personalizacion.complementos != null and personalizacion.complementos.contains('globo')}">
+                        <label class="form-check-label">Globo</label>
+                    </div>
+                </div>
+
+                <hr class="my-4" style="border-top: 2px dashed var(--verde);">
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-5 py-2" style="font-weight:700; border-radius:15px; background: linear-gradient(120deg, var(--verde), var(--verde-oscuro)); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        Guardar cambios
+                    </button>
+                </div>
+
+            </form>
+        </div>
 
     </main>
 
